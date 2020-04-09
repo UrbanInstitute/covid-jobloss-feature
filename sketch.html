@@ -1,0 +1,88 @@
+<head>
+  <style>
+    #buttons{
+      width: 50%;
+    font-size: 13px;
+    display: inline-block;
+    float: left;
+    }
+    #allButton{
+      display: block;
+      width: 100px;
+      text-align: center;
+      margin-bottom: 50px;  
+    font-family: Lato;
+    background: #fdbf11;
+    color: #fff;
+    padding: 10px 20px;
+    margin-right: 30px;
+    margin-bottom: 10px;
+    }
+    #figure{
+  width: 50%;
+    float: left;
+    display: inline-block;
+    }
+    .button{
+display: inline-block;
+    font-family: Lato;
+    background: #1696d2;
+    color: #fff;
+    padding: 10px 20px;
+    margin-right: 30px;
+    margin-bottom: 10px;
+    }
+
+    #figure img{
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+<div id = "allButton">
+  All jobs
+</div>
+<div id = "buttons">
+</div>
+
+<div id = "figure">
+  <img src = "sketches/all.png">
+</div>
+<script src = "https://cdnjs.cloudflare.com/ajax/libs/d3/5.15.1/d3.min.js"></script>
+  <script>
+var data = [
+["Agriculture, Forestry, Fishing, and Hunting", "Agriculture"],
+["Mining, Quarrying, and Oil and Gas Extractions", "mining"],
+["Utilities", "utilities"],
+["Construction", "construction"],
+["Manufacturing", "Manufacturing"],
+["Wholesale Trade", "wholesale"],
+["Retail Trade", "retail"],
+["Transportation and Warehousing", "Transportation"],
+["Information", "information"],
+["Finance and Insurance", "finance"],
+["Real Estate and Rental and Leasing", "finance"],
+["Professional, Scientific, and Technical Services", "technical"],
+["Management of Companies and Enterprises", "management"],
+["Administrative and Support and Waste Management and Remediation Services", "admin"],
+["Educational Services", "education"],
+["Health Care and Social Assistance", "health"],
+["Arts, Entertainment, and Recreation", "arts"],
+["Accomodation and Food Services", "food"],
+["Other Services", "other"],
+["Public Administration", "pa"]
+]
+
+
+d3.select("#buttons").selectAll(".button")
+  .data(data)
+  .enter()
+  .append("div")
+  .attr("class", "button")
+  .text(function(d){ return d[0]})
+  .on("click", function(d){
+    d3.select("#figure img").attr("src", "sketches/" + d[1] + ".png")
+  })
+
+</script>
+</body>
