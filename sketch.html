@@ -46,7 +46,7 @@ display: inline-block;
 </div>
 
 <div id = "figure">
-  <img src = "sketches/all.png">
+  <img src = "sketches/smaller/all.png">
 </div>
 <script src = "https://cdnjs.cloudflare.com/ajax/libs/d3/5.15.1/d3.min.js"></script>
   <script>
@@ -81,7 +81,7 @@ d3.select("#buttons").selectAll(".button")
   .attr("class", "button")
   .text(function(d){ return d[0]})
   .on("click", function(d){
-    d3.select("#figure img").attr("src", "sketches/" + d[1] + ".png")
+    d3.select("#figure img").attr("src", "sketches/smaller/" + d[1] + ".png")
   })
 
 </script>
