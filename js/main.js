@@ -327,7 +327,7 @@ var x = d3.scaleLinear()
   ]);
 
 
-barData = barData.sort(function(a,b){  return b.v - a.v })
+// barData = barData.sort(function(a,b){  return b.v - a.v })
 var y0 = d3.scaleBand()
     .rangeRound([0, h - margin.top - margin.bottom])
     .paddingInner(0.1)
@@ -337,10 +337,10 @@ var y0 = d3.scaleBand()
 
 
 
-d3.selectAll(".barGroup")
-    .data(barData)
-    .transition()
-      .attr("transform", function(d) { console.log(y0(d.k)); return "translate(0," + y0(d.k) + ")"; })
+// d3.selectAll(".barGroup")
+//     .data(barData)
+//     .transition()
+//       .attr("transform", function(d) { console.log(y0(d.k)); return "translate(0," + y0(d.k) + ")"; })
 
 
 d3.selectAll(".baseline.stick")
@@ -355,6 +355,13 @@ d3.selectAll(".baseline.dot")
       .transition()
       .attr("cx", function(d){ return x(d.v) })
 
+
+d3.selectAll(".industryLabel")
+.data(barData)
+     	// .attr("y",10)
+     	// .attr("dy",0)
+     	.text(function(d){ console.log(d.k); return industries[d.k.replace("cns","X")] })
+      // .call(wrap, 230);
 
 
 	 // {k: "X18", v: 43.8}
