@@ -1,0 +1,44 @@
+svg, body{
+	font-family: Lato;
+}
+
+#mapContainer{
+	display: inline-block;
+    bottom: 0;
+    width: 650px;
+    height: 450px;
+    float: left;
+}
+#barChartContainer{
+	display: inline-block;
+    bottom: 0;
+    /*width: 300px;*/
+    /*height: 600px;*/
+    float: left;
+    cursor: pointer;
+}
+
+
+
+
+
+
+/**********************************************************/
+/************************ BAR CHART ***********************/
+/**********************************************************/
+
+.chartEl{
+	stroke-width: 2px;
+}
+.baseline.chartEl{
+	stroke: #1696d2;
+}
+.dot.chartEl{
+	fill: #fff;
+}
+.tract.chartEl{
+	stroke: #fdbf11;
+}
+.industryLabel{
+	font-size: 12px;
+}
