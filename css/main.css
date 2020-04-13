@@ -4,6 +4,7 @@ svg, body{
 
 #mapContainer{
 	display: inline-block;
+    position: relative;
     bottom: 0;
     width: 650px;
     height: 450px;
@@ -18,10 +19,20 @@ svg, body{
     cursor: pointer;
 }
 
+/**********************************************************/
+/**************************** MAP *************************/
+/**********************************************************/
 
-
-
-
+#zoomOutIcon{
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    z-index: 1;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 20px;
+    opacity: 0;
+}
 
 /**********************************************************/
 /************************ BAR CHART ***********************/
