@@ -75,6 +75,9 @@ svg, body{
 .tract.chartEl{
 	stroke: #fdbf11;
 }
+.X14.chartEl{
+    opacity: 0 !important;
+}
 .industryLabel{
 	font-size: 12px;
 }
