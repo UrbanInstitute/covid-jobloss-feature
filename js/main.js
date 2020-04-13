@@ -537,6 +537,14 @@ function initMap(){
 
 		})
 
+		map.on("zoom", function(e){
+			// console.log(e.target.transform.tileZoom)
+			if(map.getZoom() < 6){
+				if (getClickedBaselineType() == "county") map.setLayoutProperty("county-fill", 'visibility', 'visible');
+				if (getClickedBaselineType() == "cbsa") map.setLayoutProperty("cbsa-fill", 'visibility', 'visible');
+			}
+		})
+
 
 		map.on('mousemove', 'tract-fill', function(e) {
 			if(map.getZoom() == US_ZOOM) return false
@@ -549,7 +557,8 @@ function initMap(){
 		map.on("click", "tract-fill", function(e){
 			var baselineType = getClickedBaselineType()
 			if(baselineType == "county"){
-				console.log(e.features[0].properties.GEOID.substring(0,5))
+				var geoid = e.features[0].properties.GEOID.substring(0,5)
+				dispatch.call("activateGeoid",null,"county",geoid)
 			}else{
 				console.log(e.features[0].properties)
 			}
@@ -582,7 +591,7 @@ function initMap(){
 			map.setCenter([-95.5795, 39.8283])
 			map.zoomTo(US_ZOOM)
 			map.setLayoutProperty("cbsa-fill", 'visibility', 'visible');
-			map.setLayoutProperty("county-fill", 'visibility', 'visible')
+			map.setLayoutProperty("county-fill", 'visibility', 'visible');
 
 		})
 		dispatch.on("zoomIn", function(coordinates){
