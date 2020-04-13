@@ -11,6 +11,7 @@ svg, body{
     float: left;
 }
 #barChartContainer{
+    position: relative;
 	display: inline-block;
     bottom: 0;
     /*width: 300px;*/
@@ -33,6 +34,30 @@ svg, body{
     font-size: 20px;
     opacity: 0;
 }
+.baselineControl{
+    display: inline-block;
+    text-transform: uppercase;
+    padding: 10px 20px;
+    background: #9d9d9d;
+    color: white;
+    margin-bottom: 20px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+.baselineControl:hover{
+    background: #353535;
+}
+.baselineControl.active{
+    background: #1696d2;
+}
+.baselineControl.active:hover{
+    background: #0a4c6a;
+}
+.baselineControl.disabled{
+    background: #d2d2d2;
+    color: #9d9d9d;
+    pointer-events: none;
+}
 
 /**********************************************************/
 /************************ BAR CHART ***********************/
@@ -52,4 +77,17 @@ svg, body{
 }
 .industryLabel{
 	font-size: 12px;
+}
+
+.axis.x path{
+    display: none;
+}
+.axis.x line{
+    stroke: #dedddd;
+}
+#barAxisLabel{
+    font-size: 12px;
+    font-style: italic;
+    position: absolute;
+    left: 170px;
 }
