@@ -510,7 +510,7 @@ function initMap(){
 		map.setLayoutProperty("cbsa-stroke", 'visibility', 'none');
 		
 		map.setLayoutProperty("county-fill", 'visibility', 'visible');
-		map.setLayoutProperty("county-fill", 'visibility', 'visible');
+		map.setLayoutProperty("county-stroke", 'visibility', 'none');
 
 		var hideHoverData = {
 			'type': 'Feature',
@@ -552,6 +552,7 @@ function initMap(){
 			if(map.getZoom() > US_ZOOM) return false
 			setActiveBaseline(e.features[0].properties, "county", false)
 			var data = {'type': 'Feature', 'geometry': e.features[0].geometry}
+			map.setLayoutProperty("county-stroke", 'visibility', 'visible');
 			map.getSource('hoverBaselinePolygonSource').setData(data);
 		})
 		map.on("click", "county-fill", function(e){
@@ -563,6 +564,7 @@ function initMap(){
 			if(map.getZoom() > US_ZOOM) return false
 			setActiveBaseline(e.features[0].properties, "cbsa", false)
 			var data = {'type': 'Feature', 'geometry': e.features[0].geometry}
+			map.setLayoutProperty("cbsa-stroke", 'visibility', 'visible');
 			map.getSource('hoverBaselinePolygonSource').setData(data);
 		})
 		map.on("click", "cbsa-fill", function(e){
@@ -594,11 +596,11 @@ function initMap(){
 			if(map.getZoom() < 6){
 				if (getClickedBaselineType() == "county"){
 					map.setLayoutProperty("county-fill", 'visibility', 'visible');
-					map.setLayoutProperty("county-stroke", 'visibility', 'visible');
+					// map.setLayoutProperty("county-stroke", 'visibility', 'visible');
 				}
 				if (getClickedBaselineType() == "cbsa"){
 					map.setLayoutProperty("cbsa-fill", 'visibility', 'visible');
-					map.setLayoutProperty("cbsa-stroke", 'visibility', 'visible');
+					// map.setLayoutProperty("cbsa-stroke", 'visibility', 'visible');
 				}
 			}
 		})
@@ -609,6 +611,7 @@ function initMap(){
 			// setActiveBaseline(e.features[0].properties, "county", false)
 			setActiveTract(e.features[0].properties, false)
 			var data = {'type': 'Feature', 'geometry': e.features[0].geometry}
+
 			map.getSource('hoverTractPolygonSource').setData(data);
 
 		})
@@ -638,6 +641,8 @@ function initMap(){
 			if(map.getZoom() == US_ZOOM){
 				map.getSource('hoverBaselinePolygonSource').setData(hideHoverData);
 			}
+			map.setLayoutProperty("county-stroke", 'visibility', 'none');
+			map.setLayoutProperty("cbsa-stroke", 'visibility', 'none');
 			// setActiveTract(getClickedTractData(), true)
 		})
 
@@ -649,9 +654,9 @@ function initMap(){
 			map.setCenter([-95.5795, 39.8283])
 			map.zoomTo(US_ZOOM)
 			map.setLayoutProperty("cbsa-fill", 'visibility', 'visible');
-			map.setLayoutProperty("cbsa-stroke", 'visibility', 'visible');
+			// map.setLayoutProperty("cbsa-stroke", 'visibility', 'visible');
 			map.setLayoutProperty("county-fill", 'visibility', 'visible');
-			map.setLayoutProperty("county-stroke", 'visibility', 'visible');
+			// map.setLayoutProperty("county-stroke", 'visibility', 'visible');
 
 		})
 		dispatch.on("zoomIn", function(coordinates){
@@ -666,9 +671,9 @@ function initMap(){
 			setTimeout(function(){
 
 				map.setLayoutProperty("cbsa-fill", 'visibility', 'none');
-				map.setLayoutProperty("cbsa-stroke", 'visibility', 'none');
+				// map.setLayoutProperty("cbsa-stroke", 'visibility', 'none');
 				map.setLayoutProperty("county-fill", 'visibility', 'none');
-				map.setLayoutProperty("county-stroke", 'visibility', 'none');
+				// map.setLayoutProperty("county-stroke", 'visibility', 'none');
 				
 
 			}, 1000)
@@ -677,31 +682,31 @@ function initMap(){
 
 		dispatch.on("viewByCounty", function(){
 			map.setLayoutProperty("cbsa-fill", 'visibility', 'none');
-			map.setLayoutProperty("cbsa-stroke", 'visibility', 'none');
+			// map.setLayoutProperty("cbsa-stroke", 'visibility', 'none');
 			
 			map.setLayoutProperty("county-fill", 'visibility', 'visible')
-			map.setLayoutProperty("county-stroke", 'visibility', 'visible')
+			// map.setLayoutProperty("county-stroke", 'visibility', 'visible')
 		})
 		dispatch.on("viewByCbsa", function(){
 			map.setLayoutProperty("cbsa-fill", 'visibility', 'visible');
-			map.setLayoutProperty("cbsa-stroke", 'visibility', 'visible');
+			// map.setLayoutProperty("cbsa-stroke", 'visibility', 'visible');
 
 			map.setLayoutProperty("county-fill", 'visibility', 'none');
-			map.setLayoutProperty("county-stroke", 'visibility', 'none');
+			// map.setLayoutProperty("county-stroke", 'visibility', 'none');
 			
 		})
 		dispatch.on("changeIndustry", function(industry){
 			baselineType = getClickedBaselineType()
 			colors = getColors(industry, false, "map")
 
-			if(map.getZoom() == US_ZOOM){
-				map.setPaintProperty(baselineType + "-fill", 'fill-color', colors);
-				map.setPaintProperty(baselineType + "-fill", 'fill-outline-color', colors);
-			}else{
+			// if(map.getZoom() == US_ZOOM){
+			// 	map.setPaintProperty(baselineType + "-fill", 'fill-color', colors);
+			// 	map.setPaintProperty(baselineType + "-fill", 'fill-outline-color', colors);
+			// }else{
 				map.setPaintProperty("job-loss-by-tract", 'fill-color', colors);
 				map.setPaintProperty("job-loss-by-tract", 'fill-outline-color', colors);
 
-			}
+			// }
 		})
 	})
 }
