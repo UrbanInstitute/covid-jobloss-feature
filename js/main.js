@@ -34,12 +34,31 @@ var industries = {
 	"X20":"Public Administration",
 }
 
-function mapColors(industry){
+
+function getColors(industry, value, chart){
 	if(industry != "XOOO"){
-		return [
-			"interpolate",
-			["linear"],
-			["get", industry],
+		// return [
+		// 	"interpolate",
+		// 	["linear"],
+		// 	["get", industry],
+		// 	1,
+		// 	"#cfe8f3",
+		// 	2,
+		// 	"#a2d4ec",
+		// 	3,
+		// 	"#73bfe2",
+		// 	4,
+		// 	"#46abdb",
+		// 	5,
+		// 	"#1696d2",
+		// 	6,
+		// 	"#12719e",
+		// 	7,
+		// 	"#0a4c6a",
+		// 	8,
+		// 	"#062635"
+		// 	]
+		colors =		[
 			1,
 			"#cfe8f3",
 			2,
@@ -57,6 +76,32 @@ function mapColors(industry){
 			8,
 			"#062635"
 			]
+		if(chart == "map"){
+			return [
+					"interpolate-hcl",
+					["linear"],
+					["get", industry]
+				]
+				.concat(colors)
+		}else{
+			var domain = [],
+			range = []
+			for(i = 0; i < colors.length - 1; i += 2){
+				domain.push(colors[i])
+				range.push(colors[i+1])
+			}
+			// domain.push(580)
+			// range.push("#db2b27")
+
+		return d3.scaleLinear()
+    .domain(domain)
+    .range(range)
+    .interpolate(d3.interpolateHcl)
+  (value)
+
+		}
+
+
 	}
 }
 
@@ -337,6 +382,7 @@ function initBarChart(countyAverageData){
 		.attr("x2", function(d){ return x(d.v) })
 		.attr("y1", function(d){ return d.k == "Xdummy" ? y1("baseline") - 15 : y1("baseline")})
 		.attr("y2", function(d){ return d.k == "Xdummy" ? y1("baseline") - 15 : y1("baseline")})
+		.style("stroke", function(d){ return getColors(false, d.v, "bar")})
 
 	var baselineDot = gs
 		.append("circle")
@@ -344,6 +390,7 @@ function initBarChart(countyAverageData){
 		.attr("cx", function(d){ return x(d.v) })
 		.attr("cy", function(d){ return d.k == "Xdummy" ? y1("baseline") - 15 : y1("baseline")})
 		.attr("r", getDotRadius())
+		.style("stroke", function(d){ return getColors(false, d.v, "bar")})
 
 
 	var tractStick = gs
@@ -421,11 +468,13 @@ function updateBarChart(data, barType){
 			.style("opacity",1)
 			.transition()
 				.attr("x2", function(d){ return x(b.v) })
+				.style("stroke", function(d){ return getColors(false, b.v, "bar")})
 
 		d3.select("." + barType + ".dot." + b.k)
 			.style("opacity",1)
 			.transition()
 				.attr("cx", function(d){ return x(b.v) })
+				.style("stroke", function(d){ return getColors(false, b.v, "bar")})
 
 
 	})
@@ -441,7 +490,7 @@ function initMap(){
 	var map = new mapboxgl.Map({
 		attributionControl: false,
 		container: 'mapContainer',
-		style: 'mapbox://styles/urbaninstitute/ck8t0hd26024r1ipa18s35flo/draft',
+		style: 'mapbox://styles/urbaninstitute/ck8zyvhje0v5a1jqthk5nzojz/draft',
 		center: [-95.5795, 39.8283],
 		zoom: US_ZOOM,
 		maxZoom: 12,
@@ -458,6 +507,9 @@ function initMap(){
 
 	map.on('load', function() {
 		map.setLayoutProperty("cbsa-fill", 'visibility', 'none');
+		map.setLayoutProperty("cbsa-stroke", 'visibility', 'none');
+		
+		map.setLayoutProperty("county-fill", 'visibility', 'visible');
 		map.setLayoutProperty("county-fill", 'visibility', 'visible');
 
 		var hideHoverData = {
@@ -540,13 +592,19 @@ function initMap(){
 		map.on("zoom", function(e){
 			// console.log(e.target.transform.tileZoom)
 			if(map.getZoom() < 6){
-				if (getClickedBaselineType() == "county") map.setLayoutProperty("county-fill", 'visibility', 'visible');
-				if (getClickedBaselineType() == "cbsa") map.setLayoutProperty("cbsa-fill", 'visibility', 'visible');
+				if (getClickedBaselineType() == "county"){
+					map.setLayoutProperty("county-fill", 'visibility', 'visible');
+					map.setLayoutProperty("county-stroke", 'visibility', 'visible');
+				}
+				if (getClickedBaselineType() == "cbsa"){
+					map.setLayoutProperty("cbsa-fill", 'visibility', 'visible');
+					map.setLayoutProperty("cbsa-stroke", 'visibility', 'visible');
+				}
 			}
 		})
 
 
-		map.on('mousemove', 'tract-fill', function(e) {
+		map.on('mousemove', 'job-loss-by-tract', function(e) {
 			if(map.getZoom() == US_ZOOM) return false
 			// setActiveBaseline(e.features[0].properties, "county", false)
 			setActiveTract(e.features[0].properties, false)
@@ -554,7 +612,7 @@ function initMap(){
 			map.getSource('hoverTractPolygonSource').setData(data);
 
 		})
-		map.on("click", "tract-fill", function(e){
+		map.on("click", "job-loss-by-tract", function(e){
 			var baselineType = getClickedBaselineType()
 			if(baselineType == "county"){
 				var geoid = e.features[0].properties.GEOID.substring(0,5)
@@ -591,7 +649,9 @@ function initMap(){
 			map.setCenter([-95.5795, 39.8283])
 			map.zoomTo(US_ZOOM)
 			map.setLayoutProperty("cbsa-fill", 'visibility', 'visible');
+			map.setLayoutProperty("cbsa-stroke", 'visibility', 'visible');
 			map.setLayoutProperty("county-fill", 'visibility', 'visible');
+			map.setLayoutProperty("county-stroke", 'visibility', 'visible');
 
 		})
 		dispatch.on("zoomIn", function(coordinates){
@@ -604,31 +664,42 @@ function initMap(){
 				duration: 1000
 			});
 			setTimeout(function(){
+
 				map.setLayoutProperty("cbsa-fill", 'visibility', 'none');
+				map.setLayoutProperty("cbsa-stroke", 'visibility', 'none');
 				map.setLayoutProperty("county-fill", 'visibility', 'none');
+				map.setLayoutProperty("county-stroke", 'visibility', 'none');
+				
 
 			}, 1000)
 		})
 
+
 		dispatch.on("viewByCounty", function(){
 			map.setLayoutProperty("cbsa-fill", 'visibility', 'none');
+			map.setLayoutProperty("cbsa-stroke", 'visibility', 'none');
+			
 			map.setLayoutProperty("county-fill", 'visibility', 'visible')
+			map.setLayoutProperty("county-stroke", 'visibility', 'visible')
 		})
 		dispatch.on("viewByCbsa", function(){
-			map.setLayoutProperty("cbsa-fill", 'visibility', 'visible')
+			map.setLayoutProperty("cbsa-fill", 'visibility', 'visible');
+			map.setLayoutProperty("cbsa-stroke", 'visibility', 'visible');
+
 			map.setLayoutProperty("county-fill", 'visibility', 'none');
+			map.setLayoutProperty("county-stroke", 'visibility', 'none');
 			
 		})
 		dispatch.on("changeIndustry", function(industry){
 			baselineType = getClickedBaselineType()
-			colors = mapColors(industry)
+			colors = getColors(industry, false, "map")
 
 			if(map.getZoom() == US_ZOOM){
 				map.setPaintProperty(baselineType + "-fill", 'fill-color', colors);
 				map.setPaintProperty(baselineType + "-fill", 'fill-outline-color', colors);
 			}else{
-				map.setPaintProperty("tract-fill", 'fill-color', colors);
-				map.setPaintProperty("tract-fill", 'fill-outline-color', colors);
+				map.setPaintProperty("job-loss-by-tract", 'fill-color', colors);
+				map.setPaintProperty("job-loss-by-tract", 'fill-outline-color', colors);
 
 			}
 		})
@@ -653,6 +724,8 @@ function initControls(){
 		}
 	})
 }
+
+
 
 function init(
 rawUSAverageData,
