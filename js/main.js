@@ -382,7 +382,7 @@ function initBarChart(countyAverageData){
 		.attr("x2", function(d){ return x(d.v) })
 		.attr("y1", function(d){ return d.k == "Xdummy" ? y1("baseline") - 15 : y1("baseline")})
 		.attr("y2", function(d){ return d.k == "Xdummy" ? y1("baseline") - 15 : y1("baseline")})
-		.style("stroke", function(d){ return getColors(false, d.v, "bar")})
+		.style("stroke", "#000")
 
 	var baselineDot = gs
 		.append("circle")
@@ -390,25 +390,25 @@ function initBarChart(countyAverageData){
 		.attr("cx", function(d){ return x(d.v) })
 		.attr("cy", function(d){ return d.k == "Xdummy" ? y1("baseline") - 15 : y1("baseline")})
 		.attr("r", getDotRadius())
-		.style("stroke", function(d){ return getColors(false, d.v, "bar")})
+		.style("stroke", "#000")
 
 
-	var tractStick = gs
-		.append("line")
-		.attr("class",function(d){ return "tract chartEl stick " + d.k })
-		.attr("x1",x(0))
-		.attr("x2", x(0) )
-		.attr("y1", function(d){ return d.k == "Xdummy" ? y1("tract") - 15 : y1("tract")})
-		.attr("y2", function(d){ return d.k == "Xdummy" ? y1("tract") - 15 : y1("tract")})
+	// var tractStick = gs
+	// 	.append("line")
+	// 	.attr("class",function(d){ return "tract chartEl stick " + d.k })
+	// 	.attr("x1",x(0))
+	// 	.attr("x2", x(0) )
+	// 	.attr("y1", function(d){ return d.k == "Xdummy" ? y1("tract") - 15 : y1("tract")})
+	// 	.attr("y2", function(d){ return d.k == "Xdummy" ? y1("tract") - 15 : y1("tract")})
 
 
-	var tractDot = gs
-		.append("circle")
-		.attr("class",function(d){ return "tract chartEl dot " + d.k })
-		.attr("cx", x(0) )
-		.attr("cy", function(d){ return d.k == "Xdummy" ? y1("tract") - 15 : y1("tract")})
-		.attr("r", getDotRadius())
-		.style("opacity",0)
+	// var tractDot = gs
+	// 	.append("circle")
+	// 	.attr("class",function(d){ return "tract chartEl dot " + d.k })
+	// 	.attr("cx", x(0) )
+	// 	.attr("cy", function(d){ return d.k == "Xdummy" ? y1("tract") - 15 : y1("tract")})
+	// 	.attr("r", getDotRadius())
+	// 	.style("opacity",0)
 
 
 	var industryLabel = gs
@@ -464,17 +464,20 @@ function updateBarChart(data, barType){
 
 				})
 
-		d3.selectAll("." + barType + ".stick." + b.k)
+	var barColor = (barType == "baseline") ? "#000" : "#fdbf11"
+		d3.selectAll(".chartEl.stick." + b.k)
 			.style("opacity",1)
+			.style("stroke", barColor)
 			.transition()
 				.attr("x2", function(d){ return x(b.v) })
-				.style("stroke", function(d){ return getColors(false, b.v, "bar")})
+				
 
-		d3.select("." + barType + ".dot." + b.k)
+		d3.select(".chartEl.dot." + b.k)
 			.style("opacity",1)
+			.style("stroke", barColor)
 			.transition()
 				.attr("cx", function(d){ return x(b.v) })
-				.style("stroke", function(d){ return getColors(false, b.v, "bar")})
+				
 
 
 	})
