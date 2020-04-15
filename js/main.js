@@ -427,6 +427,10 @@ function initBarChart(usAverageData){
 	var xAxis =   g.append("g")
       .attr("class", "axis x")
       .call(d3.axisTop(x).tickSize([-height]).ticks(4))
+      .selectAll(".tick line")
+      .style("stroke", function(d){
+      	return (d == 0) ? "#000" : "#dedddd"
+      })
 
 
 	var gs = g
@@ -475,6 +479,7 @@ function initBarChart(usAverageData){
 		.append("text")
 		.attr("class",function(d){ return "industryLabel " + d.k })
 		.attr("dy",0)
+		.attr("dx",3)
 		.attr("y",function(d){ return d.k == "X14" ? 12 : 12})
 		.text(function(d){ return industries[d.k] })
 		.call(wrap, 300);
@@ -576,10 +581,10 @@ function initMap(){
 
 	map.addControl(new mapboxgl.AttributionControl({
 		compact: true
-	}));
+	}), "top-right");
 
 	map.scrollZoom.disable();
-	map.addControl(new mapboxgl.NavigationControl({"showCompass": false}));
+	map.addControl(new mapboxgl.NavigationControl({"showCompass": false}), "bottom-right");
 
 
 	map.on('load', function() {
@@ -665,7 +670,6 @@ function initMap(){
 // console.log(bd.coords, e.features, e.features[0].geometry.coordinates,"\n","\n")
 // console.log(e.features)
 			var f = e.features;
-			console.log(f.length, f[0].properties.county_fips)
 			var coords = []
 			for(var i = 0; i< f.length; i++){
 				coords.push(f[i].geometry.coordinates)

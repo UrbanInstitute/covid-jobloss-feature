@@ -6,6 +6,7 @@ body{
 }
 #mapColumn{
     width: 650px;
+    /*width: 270;*/
     display: inline-block;
 }
 #barColumn{
@@ -16,6 +17,7 @@ body{
     position: relative;
     bottom: 0;
     width: 650px;
+    /*width: 270px;*/
     height: 390px;
     float: left;
 }
