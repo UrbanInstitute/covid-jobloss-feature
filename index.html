@@ -11,20 +11,112 @@
 <link rel="stylesheet" type="text/css" href="css/vendor/jquery-ui.css">
 <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic,900" rel="stylesheet" type="text/css">
 
+<style>
+	body{
+		font-family: Lato;
+		width: 1080px;
+	}
+.tmp-container{
+	display: block;
+	float: left;
+	    margin-left: 160px;
+
+}
+#tmp-title{
+	font-size: 22px;
+}
+#tmp-sub{
+	font-style: italic;
+}
+#tmp-head{
+	margin-top: 20px;
+	margin-bottom: 100px;
+}
+
+#tmp-about{
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    margin-top: 70px;
+}
+.tmp-p{
+margin-bottom: 20px;
+}
+br{
+	    height: 20px;
+    display: block;
+    /* margin-top: 20px; */
+    /* margin-bottom: 20px; */
+    content: "";
+
+}
+.tmp-credits{
+	margin-top: 80px;
+}
+#baselineControls{
+float: left;
+    clear: both;
+    width: 100%;
+}
+</style>
+
+
 </head>
 <body>
-<div id = "clickedBaselineId"></div>
-<div id = "clickedBaselineType"></div>
-<div id = "usData"></div>
-<div id = "countyBoundsData"></div>
-<div id = "cbsaBoundsData"></div>
-<div id = "baselineData"></div>
-<div id = "tractData"></div>
+
+
+
+
+
+
+
+
+
+<div class = "tmp-container">
+
+<div id = "tmp-title">Where Low-Income Jobs are Being Lost to COVID-19</div>
+<div id = "tmp-sub">Weekly updates on the places and industries most at risk </div>
+<div id = "tmp-head">Which neighborhoods are most vulnerable to COVID-19 job losses? To help nonprofits, foundations, and government target support to where it’s most needed, we estimated how many residents in each census tract have lost low-income jobs.</div>
+
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- REAL CONTENT -->
+
+<div id = "hiddenDataContainer">
+	<div id = "clickedBaselineId"></div>
+	<div id = "clickedBaselineType"></div>
+	<div id = "usData"></div>
+	<div id = "countyBoundsData"></div>
+	<div id = "cbsaBoundsData"></div>
+	<div id = "baselineData"></div>
+	<div id = "tractData"></div>
+	<div id = "tractGeometry"></div>
+</div>
 
 
 <div id = "baselineControls">
 	<div class = "baselineControl county active">county</div>
-	<div class = "baselineControl cbsa">cbsa</div>
+	<div class = "baselineControl cbsa">Metro area</div>
 </div>
 
 
@@ -73,12 +165,77 @@
 </div>
 
 <div id = "barColumn">
-	<div id = "barTitle">Estimated jobs lost in <span>the US</span></div>
-	<div id = "barTotalCount"></div>
+	<div id = "allContainer">
+		<div id = "barTitle">Estimated jobs lost in <span>the US</span></div>
+		<div id = "barTotalCount"></div>
+	</div>
+
 	<div id = "barChartContainer">
 		<div id = "barAxisLabel">Number of jobs lost</div>
 	</div>
 </div>
+
+<!-- END CONTENT -->
+
+
+
+
+
+
+<div class = "tmp-container">
+
+
+<div id = "tmp-about">ABOUT THE DATA</div>
+<div class = "tmp-p">Data represent low-income jobs, defined here as jobs with earnings below $40,000 per year, and do not include all jobs, such as independent contractors and those working in the gig economy. This feature does not attempt to estimate jobs with pay cuts, only job loss.</div>
+
+<div class = "tmp-p">These initial estimates are based on <a href = "https://esd.wa.gov/labormarketinfo/unemployment-insurance-data" target = "_blank">unemployment claims from Washington state</a>, which publishes weekly unemployment numbers by industry. To estimate the number of jobs lost by neighborhood nationwide, we apply the Washington state data on job loss by industry at all income levels to local Census tract-level data detailing the number of low-income jobs by industry. </div>
+
+<div class = "tmp-p">We will update our estimates every week with new Washington state data, and then every month with national unemployment numbers from the <a href = "http://www.bls.gov/ces/" target = "_blank">US Bureau of Labor Statistics</a> after the May 8 data release. </div>
+
+<div class = "tmp-p">These are estimates and may not be comparable to actual job loss in each neighborhood. We highly recommend these results be interpreted as relative levels of job loss for the purposes of informing investments into neighborhoods to alleviate some of the economic burden. </div>
+
+
+<div class = "tmp-p">For more information, please see our technical appendix.</div>
+
+
+<div class = "tmp-credits">
+<strong>PROJECT CREDITS</strong>
+<br/>
+The nonprofit Urban Institute is dedicated to elevating the debate on social and economic policy. The views expressed are those of the authors and should not be attributed to the Urban Institute, its trustees, or its funders. Funders do not determine research findings or the insights and recommendations of our experts.
+<br/>
+RESEARCH: Graham MacDonald, Christopher Davis, and Ajjit Narayanan
+<br/>
+DESIGN: Christina Baird 
+<br/>
+DEVELOPMENT: Ben Chartoff
+<br/>
+EDITING: Fiona Blackshaw
+<br/>
+WRITING: Serena Lei
+<br/>
+View this web application and the associated code to generate the data on GitHub
+<br/>
+View the data on Urban’s Data Catalog
+
+</div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <script src="https://api.mapbox.com/mapbox-gl-js/v1.9.1/mapbox-gl.js"></script>
 

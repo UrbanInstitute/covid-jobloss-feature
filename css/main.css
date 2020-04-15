@@ -30,6 +30,13 @@ body{
     float: left;
     cursor: pointer;
 }
+#hiddenDataContainer{
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 0px;
+    height: 0px;
+}
 
 
 /**********************************************************/
@@ -119,6 +126,9 @@ body{
 /**********************************************************/
 /************************ BAR CHART ***********************/
 /**********************************************************/
+#allContainer{
+    background: rgba(207,232,243,.55)
+}
 #barTitle{
     font-size: 14px;
     line-height: 17px;

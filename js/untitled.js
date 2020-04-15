@@ -1,4 +1,4 @@
-var dispatch = d3.dispatch("zoomOut", "zoomIn", "changeIndustry", "viewByCounty", "viewByCbsa","deselectTract");
+var dispatch = d3.dispatch("zoomOut", "zoomIn", "changeIndustry", "viewByCounty", "viewByCbsa", "activateGeoid");
 
 // var cbsaAverageData,
 // usAverageData,
@@ -47,11 +47,30 @@ var industries = {
 }
 
 
-function getColors(industry){
-	var colors;
+function getColors(industry, value, chart){
 	if(industry != "XOOO"){
-		colors =
-		[
+		// return [
+		// 	"interpolate",
+		// 	["linear"],
+		// 	["get", industry],
+		// 	1,
+		// 	"#cfe8f3",
+		// 	2,
+		// 	"#a2d4ec",
+		// 	3,
+		// 	"#73bfe2",
+		// 	4,
+		// 	"#46abdb",
+		// 	5,
+		// 	"#1696d2",
+		// 	6,
+		// 	"#12719e",
+		// 	7,
+		// 	"#0a4c6a",
+		// 	8,
+		// 	"#062635"
+		// 	]
+		colors =		[
 			1,
 			"#cfe8f3",
 			2,
@@ -68,36 +87,34 @@ function getColors(industry){
 			"#0a4c6a",
 			8,
 			"#062635"
-		]
-	}else{
-		colors = 
-		[
-			50,
-			"#cfe8f3",
-			100,
-			"#a2d4ec",
-			150,
-			"#73bfe2",
-			200,
-			"#46abdb",
-			250,
-			"#1696d2",
-			300,
-			"#12719e",
-			350,
-			"#0a4c6a",
-			400,
-			"#062635"
-		]
+			]
+		if(chart == "map"){
+			return [
+					"interpolate-hcl",
+					["linear"],
+					["get", industry]
+				]
+				.concat(colors)
+		}else{
+			var domain = [],
+			range = []
+			for(i = 0; i < colors.length - 1; i += 2){
+				domain.push(colors[i])
+				range.push(colors[i+1])
+			}
+			// domain.push(580)
+			// range.push("#db2b27")
+
+		return d3.scaleLinear()
+    .domain(domain)
+    .range(range)
+    .interpolate(d3.interpolateHcl)
+  (value)
+
+		}
+
+
 	}
-
-	return [
-			"interpolate-hcl",
-			["linear"],
-			["get", industry]
-		]
-		.concat(colors)
-
 }
 
 function sortPoints(points) {
@@ -214,8 +231,6 @@ function zoomOut(){
 	d3.select("#clickedBaselineType").datum("us")
 
 	setActiveBaseline(getUsAverageData(), "us", true)
-	dispatch.call("deselectTract")
-
 
 	d3.selectAll(".tt-cell.tract").style("display","none")
 	// setActiveBaseline("us", "us", true)
@@ -232,23 +247,22 @@ function zoomIn(baselineType, geoid, coordinates){
 function changeIndustry(industry){
 	//some kind of indication/highlight on bar chart. No value change of bars
 	d3.selectAll(".barBg").style("fill", "transparent").classed("active", false)
-	var display;
-	if(industry == "X000"){
-		display = "none"
-		d3.select("#allContainer").style("background", "rgba(207,232,243,.55)")
-	}else{
-		display = "block"
-		d3.select("#allContainer").style("background", "rgba(255,255,255,1)")
-		d3.select(".barBg." + industry).style("fill", "#CFE8F3").classed("active", true)
-	}
 
+	d3.select(".barBg." + industry).style("fill", "#d2d2d2").classed("active", true)
 	
+	var display = (industry == "X000") ? "none" : "block"
 	d3.select(".tt-row.industry").style("display",display)
 
-	var usVal = (industry == "X000") ? usTotal : getUsAverageData().filter(function(o){ return o.k == industry})[0].v
+	// if(getClickedBaselineType() == "us"){}
+	var usVal = getUsAverageData().filter(function(o){ return o.k == industry})[0].v
 
 	d3.select(".mapSubhed.industry").text("Within " + industries[industry])
 	d3.select(".tt-val.industry.us").text(intFormat(usVal))
+	// if(industry == "X000"){
+	// }else{
+
+	// 	d3.select(".barBg." + industry).datum().v
+	// }
 
 	dispatch.call("changeIndustry", null, industry)
 }
@@ -467,7 +481,6 @@ function initBarChart(usAverageData){
 		.attr("height", y0.bandwidth())
 		.attr("class", function(d){ return "barBg " + d.k})
 		.style("fill", "transparent")
-		.style("opacity",".55")
 
 	var baselineStick = gs
 		.append("line")
@@ -622,35 +635,6 @@ function initMap(){
 			}
 		}
 
-
-
-		map.addSource('hoverBaselinePolygonSource', {
-			'type': 'geojson',
-			'data': hideHoverData
-		});
-		map.addLayer({
-			'id': 'hoverBaselinePolygon',
-			'type': 'line',
-			'source': 'hoverBaselinePolygonSource',
-			'layout': {},
-			'paint': {
-				'line-color': "#fff",
-				'line-width': 
-				[
-  "interpolate",
-  ["linear"],
-  ["zoom"],
-  3,
-  2,
-  12,
-  12
-]
-			}
-		});
-
-
-
-
 		map.addSource('hoverTractPolygonSource', {
 			'type': 'geojson',
 			'data': hideHoverData
@@ -676,6 +660,29 @@ function initMap(){
 			}
 		});
 
+		map.addSource('hoverBaselinePolygonSource', {
+			'type': 'geojson',
+			'data': hideHoverData
+		});
+		map.addLayer({
+			'id': 'hoverBaselinePolygon',
+			'type': 'line',
+			'source': 'hoverBaselinePolygonSource',
+			'layout': {},
+			'paint': {
+				'line-color': "#fff",
+				'line-width': 
+				[
+  "interpolate",
+  ["linear"],
+  ["zoom"],
+  3,
+  2,
+  12,
+  10
+]
+			}
+		});
 
 
 		map.on('mousemove', 'county-fill', function(e) {
@@ -784,11 +791,6 @@ function initMap(){
 		})
 
 
-		dispatch.on("deselectTract", function(){
-			d3.select("#tractData").datum("")
-			d3.select("#tractGeometry").datum("")
-			map.getSource('hoverTractPolygonSource').setData(hideHoverData);
-		})
 
 
 		function mouseout(map){
@@ -799,17 +801,8 @@ function initMap(){
 			map.setLayoutProperty("cbsa-stroke", 'visibility', 'none');
 			if(getClickedBaselineType() == "us"){
 				setActiveBaseline(getUsAverageData(), "us", true)
-				dispatch.call("deselectTract")
 				map.getSource('hoverBaselinePolygonSource').setData(hideHoverData);
 			}else{
-				if(getClickedTractData() == ""){
-					dispatch.call("deselectTract")
-					setActiveBaseline(getClickedBaselineData(), getClickedBaselineType(), true)
-				}else{
-					var tractHoverData = {'type': 'Feature', 'geometry': getClickedTractGeometry()}
-					map.getSource('hoverTractPolygonSource').setData(tractHoverData);
-					setActiveTract(getClickedTractData(), getClickedTractGeometry(), true)
-				}
 
 				var bd;
 				if(getClickedBaselineType() == "county"){
@@ -827,8 +820,9 @@ function initMap(){
 									}
 					}
 				map.getSource('hoverBaselinePolygonSource').setData(hoverData);
-			}
 
+				setActiveBaseline(getClickedBaselineData(), getClickedBaselineType(), true)
+			}
 
 		}
 
@@ -920,8 +914,7 @@ function initMap(){
 		})
 		dispatch.on("changeIndustry", function(industry){
 			baselineType = getClickedBaselineType()
-			colors = getColors(industry)
-			console.log(colors)
+			colors = getColors(industry, false, "map")
 
 			// if(map.getZoom() == US_ZOOM){
 			// 	map.setPaintProperty(baselineType + "-fill", 'fill-color', colors);
@@ -952,10 +945,6 @@ function initControls(){
 			changeBaselineType(baselineType)
 		}
 	})
-	d3.select("#allContainer").on("mouseover", function(){
-		console.log("foo")
-		changeIndustry("X000")
-	})
 }
 
 function initTooltip(usAverageData){
@@ -965,8 +954,6 @@ function initTooltip(usAverageData){
 	d3.select("#barTotalCount").text(intFormat(total))
 	d3.select("#usData").datum(usAverageData[INIT_GEOID]["vs"])
 	d3.select("#clickedBaselineType").datum("us")
-	d3.select("#tractData").datum("")
-	d3.select("#tractGeometry").datum("")
 }
 // function updateTooltip()
 
