@@ -119,7 +119,18 @@ body{
 /**********************************************************/
 /************************ BAR CHART ***********************/
 /**********************************************************/
-
+#barTitle{
+    font-size: 14px;
+    line-height: 17px;
+    color: #333333;
+    width: 320px;
+}
+#barTotalCount{
+    font-weight: bold;
+    font-size: 36px;
+    line-height: 43px;
+    color: #1696D2;
+}
 .chartEl{
 	stroke-width: 2px;
 }
