@@ -189,6 +189,9 @@ function getClickedTractData(){
 function getClickedTractGeometry(){
 	return d3.select("#tractGeometry").datum()
 }
+function getClickedBaselineGeometry(){
+	return d3.select("#baselineGeometry").datum()
+}
 function getClickedBaselineData(){
 	return d3.select("#baselineData").datum()
 }
@@ -213,7 +216,7 @@ function zoomOut(){
 	d3.selectAll(".tract.chartEl").transition().style("opacity",0)
 	d3.select("#clickedBaselineType").datum("us")
 
-	setActiveBaseline(getUsAverageData(), "us", true)
+	setActiveBaseline(getUsAverageData(),"", "us", true)
 	dispatch.call("deselectTract")
 
 
@@ -255,7 +258,10 @@ function changeIndustry(industry){
 function disableBaselineType(baselineType){
 	d3.select(".baselineControl." + baselineType).classed("disabled",true)
 }
-function setActiveBaseline(averageData, baselineType, clicked){
+function setActiveBaseline(averageData, geometry, baselineType, clicked){
+	if(clicked && geometry != ""){
+		d3.select("#baselineGeometry").datum(geometry)
+	}
 	if(baselineType == "us"){
 		d3.selectAll(".tt-cell.baseline").style("display","none")
 		d3.select("#barTitle span").html("the US")
@@ -505,7 +511,6 @@ function updateBarChart(data, barType){
 		width = w - margin.left - margin.right,
 		height = h - margin.top - margin.bottom
 
-// console.log(data)
 	
 	var barData;
 	if(barType != "us"){
@@ -680,28 +685,54 @@ function initMap(){
 
 		map.on('mousemove', 'county-fill', function(e) {
 			if(getClickedButton() == "cbsa") return false
+			if(map.getZoom())
 			map.setLayoutProperty("county-fill", 'visibility', 'visible');
 			map.setLayoutProperty("county-stroke", 'visibility', 'visible');
 		
 			bd = getCountyBoundsData()[e.features[0].properties.county_fips]
-console.log(bd.coords, e.features, e.features[0].geometry.coordinates,"\n","\n")
+			// console.log(bd)
+// console.log(bd.coords, e.features, e.features[0].geometry.coordinates,"\n","\n")
+// console.log(e.features)
+			var f = e.features;
+			console.log(f.length, f[0].properties.county_fips)
+			var coords = []
+			for(var i = 0; i< f.length; i++){
+				coords.push(f[i].geometry.coordinates)
+			}
 			var hoverData = 
 				{
 					'type': 'Feature',
 					'geometry': {
 						'type': 'MultiPolygon',
-						'coordinates': bd.coords
+						'coordinates': coords
 								}
 				}
 			map.getSource('hoverBaselinePolygonSource').setData(hoverData);
-			setActiveBaseline(e.features[0].properties, "county", false)	
+			setActiveBaseline(e.features[0].properties, "", "county", false)	
 		})
 		map.on("click", "county-fill", function(e){
 			if(getClickedButton() == "cbsa") return false
 			d3.select("#clickedBaselineType").datum("county")
-			setActiveBaseline(e.features[0].properties, "county", true)	
+			
 			// var coordinates = e.features[0].geometry.coordinates[0]		
 			bd = getCountyBoundsData()[e.features[0].properties.county_fips]
+			var f = e.features;
+			console.log(f.length, f[0].properties.county_fips)
+			var coords = []
+			for(var i = 0; i< f.length; i++){
+				coords.push(f[i].geometry.coordinates)
+			}
+			var hoverData = 
+				{
+					'type': 'Feature',
+					'geometry': {
+						'type': 'MultiPolygon',
+						'coordinates': coords
+								}
+				}
+			map.getSource('hoverBaselinePolygonSource').setData(hoverData);
+
+			setActiveBaseline(e.features[0].properties, hoverData, "county", true)	
 			// g = f.geometry
 			// var data = {'type': 'Feature', 'geometry': g}
 
@@ -715,26 +746,59 @@ console.log(bd.coords, e.features, e.features[0].geometry.coordinates,"\n","\n")
 			bd = getCbsaBoundsData()[e.features[0].properties.cbsa]
 			// console.log(e.features[0].properties.cbsa, bd)
 
+			// var hoverData = 
+			// 	{
+			// 		'type': 'Feature',
+			// 		'geometry': {
+			// 			'type': 'MultiPolygon',
+			// 			'coordinates': bd.coords
+			// 					}
+			// 	}
+			// map.getSource('hoverBaselinePolygonSource').setData(hoverData);
+			var f = e.features;
+			console.log(f.length, f[0].properties.county_fips)
+			var coords = []
+			for(var i = 0; i< f.length; i++){
+				coords.push(f[i].geometry.coordinates)
+			}
 			var hoverData = 
 				{
 					'type': 'Feature',
 					'geometry': {
 						'type': 'MultiPolygon',
-						'coordinates': bd.coords
+						'coordinates': coords
 								}
 				}
 			map.getSource('hoverBaselinePolygonSource').setData(hoverData);
-			setActiveBaseline(e.features[0].properties, "cbsa", false)	
+
+
+
+			setActiveBaseline(e.features[0].properties, "", "cbsa", false)	
 
 
 		})
 		map.on("click", "cbsa-fill", function(e){
 			if(getClickedButton() == "county_fips") return false
 			d3.select("#clickedBaselineType").datum("cbsa")
-			setActiveBaseline(e.features[0].properties, "cbsa", true)	
 			// var coordinates = e.features[0].geometry.coordinates[0]		
 			bd = getCbsaBoundsData()[e.features[0].properties.cbsa]
+			var f = e.features;
+			console.log(f.length, f[0].properties.county_fips)
+			var coords = []
+			for(var i = 0; i< f.length; i++){
+				coords.push(f[i].geometry.coordinates)
+			}
+			var hoverData = 
+				{
+					'type': 'Feature',
+					'geometry': {
+						'type': 'MultiPolygon',
+						'coordinates': coords
+								}
+				}
 			// g = f.geometry
+			setActiveBaseline(e.features[0].properties, hoverData, "cbsa", true)	
+
 			// var data = {'type': 'Feature', 'geometry': g}
 
 			zoomIn("cbsa", e.features[0].properties.cbsa, bd.bounds)
@@ -769,18 +833,6 @@ console.log(bd.coords, e.features, e.features[0].geometry.coordinates,"\n","\n")
 			if(map.getZoom() == US_ZOOM) return false
 			setActiveTract(e.features[0].properties, e.features[0].geometry, true)
 			
-			// console.log("tract")
-			// var baselineType = getClickedButton()
-			// if(baselineType == "county"){
-			// 	var geoid = e.features[0].properties.GEOID.substring(0,5)
-			// 	dispatch.call("activateGeoid",null,"county",geoid)
-			// }else{
-				
-			// }
-			
-			// setActiveBaseline(e.features[0].properties, "county", true)	
-			// var coordinates = e.features[0].geometry.coordinates[0]		
-			// zoomIn("county", e.features[0].properties.county_fips, coordinates)
 		})
 
 
@@ -798,34 +850,35 @@ console.log(bd.coords, e.features, e.features[0].geometry.coordinates,"\n","\n")
 			map.setLayoutProperty("county-stroke", 'visibility', 'none');
 			map.setLayoutProperty("cbsa-stroke", 'visibility', 'none');
 			if(getClickedBaselineType() == "us"){
-				setActiveBaseline(getUsAverageData(), "us", true)
+				setActiveBaseline(getUsAverageData(),"", "us", true)
 				dispatch.call("deselectTract")
 				map.getSource('hoverBaselinePolygonSource').setData(hideHoverData);
 			}else{
 				if(getClickedTractData() == ""){
 					dispatch.call("deselectTract")
-					setActiveBaseline(getClickedBaselineData(), getClickedBaselineType(), true)
+					setActiveBaseline(getClickedBaselineData(), getClickedBaselineGeometry(), getClickedBaselineType(), true)
 				}else{
 					var tractHoverData = {'type': 'Feature', 'geometry': getClickedTractGeometry()}
 					map.getSource('hoverTractPolygonSource').setData(tractHoverData);
 					setActiveTract(getClickedTractData(), getClickedTractGeometry(), true)
 				}
 
-				var bd;
-				if(getClickedBaselineType() == "county"){
-					bd = getCountyBoundsData()[getClickedBaseline()]
-				}else{
-					bd = getCbsaBoundsData()[getClickedBaseline()]
-				}
+				// var bd;
+				// if(getClickedBaselineType() == "county"){
+				// 	bd = getCountyBoundsData()[getClickedBaseline()]
+				// }else{
+				// 	bd = getCbsaBoundsData()[getClickedBaseline()]
+				// }
 
-				var hoverData = 
-					{
-						'type': 'Feature',
-						'geometry': {
-							'type': 'MultiPolygon',
-							'coordinates': bd.coords
-									}
-					}
+				// var hoverData = 
+				// 	{
+				// 		'type': 'Feature',
+				// 		'geometry': {
+				// 			'type': 'MultiPolygon',
+				// 			'coordinates': bd.coords
+				// 					}
+				// 	}
+				var hoverData = getClickedBaselineGeometry();
 				map.getSource('hoverBaselinePolygonSource').setData(hoverData);
 			}
 
@@ -975,11 +1028,10 @@ rawUSAverageData,
 rawCountyBounds,
 rawCbsaBounds
 ){	
-	// usAverageData = rawUSAverageData;
-	// countyBoundsData = rawcountyBoundsData;
-	// cbsaData = rawcountyBoundsData;
-	// d3.select("#countyBoundsData").datum(rawCountyBounds)
-	// d3.select("#cbsaBoundsData").datum(rawCbsaBounds)
+
+
+	d3.select("#countyBoundsData").datum(rawCountyBounds)
+	d3.select("#cbsaBoundsData").datum(rawCbsaBounds)
 
 	initTooltip(rawUSAverageData);
 	initBarChart(rawUSAverageData);
@@ -990,10 +1042,9 @@ rawCbsaBounds
 
 
 d3.json("data/sum_job_loss_us.json").then(function(rawUSAverageData){
-	// d3.json("data/sum_job_loss_county_reshaped.json").then(function(countyBounds){
-		// d3.json("data/sum_job_loss_cbsa_reshaped.json").then(function(cbsaBounds){
-			// init(rawUSAverageData, countyBounds, cbsaBounds)
-			init(rawUSAverageData, false, false)
-		// })
-	// })
+	d3.json("data/sum_job_loss_county_reshaped.json").then(function(countyBounds){
+		d3.json("data/sum_job_loss_cbsa_reshaped.json").then(function(cbsaBounds){
+			init(rawUSAverageData, countyBounds, cbsaBounds)
+		})
+	})
 })

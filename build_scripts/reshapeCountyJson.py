@@ -47,7 +47,7 @@ for d in inData:
 	if(fips in outData):
 		print(fips)
 	else:
-		outData[fips] = {"bounds": bounds, "coords": coords}
+		outData[fips] = {"bounds": bounds, "coords": ""}
 
 with open("data/sum_job_loss_county_reshaped.json","w") as f:
 	json.dump(outData, f)

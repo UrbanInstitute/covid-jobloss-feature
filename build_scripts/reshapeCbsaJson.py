@@ -17,6 +17,10 @@ for d in inData:
 	coords = d["geometry"]["coordinates"]
 	fips = d["properties"]["cbsa"]
 
+	# some coordinates are multipolygons (e.g. islands in michigan)
+	# for hover polygons, should display full multipolygon, so grab full coords
+	# for bounding boxes, bb should be for the largest polygon
+		# to improve, could figure out bb of all multipolygons, but on deadline!
 	bbs = []
 	areas = []
 	for coord in coords:
@@ -29,13 +33,13 @@ for d in inData:
 		print(area)
 	ind = areas.index(max(areas))
 	bounds = bbs[ind]
-	# break
+	
 
 
 	if(fips in outData):
 		print(fips)
 	else:
-		outData[fips] = {"bounds": bounds, "coords": coords}
+		outData[fips] = {"bounds": bounds, "coords": ""}
 
 with open("data/sum_job_loss_cbsa_reshaped.json","w") as f:
 	json.dump(outData, f)
