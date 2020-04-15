@@ -11,6 +11,7 @@ var dispatch = d3.dispatch("zoomOut", "zoomIn", "changeIndustry", "viewByCounty"
 var INIT_GEOID = "99"
 var US_ZOOM = 3.0
 var US_MAX = 3550000;
+var US_CENTER = [-95.5795, 37.8283]
 var usTotal;
 var intFormat = function(v){
 	if(v == 0){
@@ -228,7 +229,7 @@ function changeIndustry(industry){
 
 	var usVal = (industry == "X000") ? usTotal : getUsAverageData().filter(function(o){ return o.k == industry})[0].v
 
-	d3.select(".mapSubhed.industry").text("Within " + industries[industry])
+	d3.select(".mapSubhed.industry").html("Within<span>" + industries[industry] + "</span>")
 	d3.select(".tt-val.industry.us").text(intFormat(usVal))
 
 	dispatch.call("changeIndustry", null, industry)
@@ -567,7 +568,7 @@ function initMap(){
 		attributionControl: false,
 		container: 'mapContainer',
 		style: 'mapbox://styles/urbaninstitute/ck91njx5n1d3g1iqhio2nyhem/draft',
-		center: [-95.5795, 39.8283],
+		center: US_CENTER,
 		zoom: US_ZOOM,
 		maxZoom: 12,
 		minZoom: 3
@@ -872,7 +873,7 @@ function initMap(){
 
 		dispatch.on("zoomOut", function(){
 			map.getSource('hoverBaselinePolygonSource').setData(hideHoverData);
-			map.setCenter([-95.5795, 39.8283])
+			map.setCenter(US_CENTER)
 			map.zoomTo(US_ZOOM)
 			map.setLayoutProperty("cbsa-fill", 'visibility', 'visible');
 			map.setLayoutProperty("cbsa-stroke", 'visibility', 'visible');
@@ -992,12 +993,11 @@ function initTooltip(usAverageData){
 // function updateTooltip()
 
 var rc;
-
 function init(
-rawUSAverageData,
-rawCountyBounds,
-rawCbsaBounds
-){	
+	rawUSAverageData,
+	rawCountyBounds,
+	rawCbsaBounds
+	){	
 
 
 	d3.select("#countyBoundsData").datum(rawCountyBounds)
@@ -1011,6 +1011,7 @@ rawCbsaBounds
 }
 
 
+
 d3.json("data/sum_job_loss_us.json").then(function(rawUSAverageData){
 	d3.json("data/sum_job_loss_county_reshaped.json").then(function(countyBounds){
 		d3.json("data/sum_job_loss_cbsa_reshaped.json").then(function(cbsaBounds){
@@ -1018,3 +1019,6 @@ d3.json("data/sum_job_loss_us.json").then(function(rawUSAverageData){
 		})
 	})
 })
+
+
+var pymChild = new pym.Child({polling: 500});

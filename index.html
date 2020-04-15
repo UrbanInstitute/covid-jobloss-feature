@@ -5,9 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
 
 <title>embedded covid job loss feature</title>
-<link href="https://api.mapbox.com/mapbox-gl-js/v1.9.1/mapbox-gl.css" rel="stylesheet" />
-
-<link rel="stylesheet" href="css/main.css" type="text/css">
 <link rel="stylesheet" type="text/css" href="css/vendor/jquery-ui.css">
 <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic,900" rel="stylesheet" type="text/css">
 
@@ -91,94 +88,15 @@ float: left;
 
 
 
+<div id="urban-embed_covid-jobloss"></div>
+<script type="text/javascript" src="http://apps.urban.org/features/covid-jobloss-feature/js/vendor/pym.min.js"></script>
+<script>
+    var pymParent = new pym.Parent('urban-embed_covid-jobloss', 'http://apps.urban.org/features/covid-jobloss-feature/child.html', {});
+</script>
 
 
 
 
-
-
-
-
-
-<!-- REAL CONTENT -->
-
-<div id = "hiddenDataContainer">
-	<div id = "clickedBaselineId"></div>
-	<div id = "clickedBaselineType"></div>
-	<div id = "usData"></div>
-	<div id = "countyBoundsData"></div>
-	<div id = "cbsaBoundsData"></div>
-	<div id = "baselineData"></div>
-	<div id = "tractData"></div>
-	<div id = "tractGeometry"></div>
-	<div id = "baselineGeometry"></div>
-</div>
-
-
-<div id = "baselineControls">
-	<div class = "baselineControl county active">county</div>
-	<div class = "baselineControl cbsa">Metro area</div>
-</div>
-
-
-<div id = "mapColumn">
-	<div id = "tt-container">
-		<div id = "mapTitle">Total estimated jobs lost</div>
-
-		<div class = "tt-row all">
-			<div class = "mapSubhed">Overall</div>
-			<div class = "tt-cell all us">
-				<div class = "tt-geo all us">US</div>
-				<div class = "tt-val all us"></div>
-			</div>
-			<div class = "tt-cell all baseline">
-				<div class = "tt-geo all baseline"></div>
-				<div class = "tt-val all baseline"></div>
-			</div>
-			<div class = "tt-cell all tract">
-				<div class = "tt-geo all tract">Selected census tract</div>
-				<div class = "tt-val all tract"></div>
-			</div>
-		</div>
-
-		<div class = "tt-row industry">
-			<div class = "mapSubhed industry"></span></div>
-
-			<div class = "tt-cell industry us">
-				<div class = "tt-geo industry us">US</div>
-				<div class = "tt-val industry us"></div>
-			</div>
-			<div class = "tt-cell industry baseline">
-				<div class = "tt-geo industry baseline"></div>
-				<div class = "tt-val industry baseline"></div>
-			</div>
-			<div class = "tt-cell industry tract">
-				<div class = "tt-geo industry tract">Selected census tract</div>
-				<div class = "tt-val industry tract"></div>
-			</div>
-		</div>
-
-	</div>
-
-	<div id = "mapContainer">
-		<div id = "zoomOutIcon">zoom out</div>
-	</div>
-</div>
-
-<div id = "barColumn">
-	<div id = "allContainer">
-		<div id = "barTitleContainer">
-			<div id = "barTitle">Estimated jobs lost in <span>the US</span></div>
-		</div>
-		<div id = "barTotalCount"></div>
-	</div>
-
-	<div id = "barChartContainer">
-		<div id = "barAxisLabel">Number of jobs lost</div>
-	</div>
-</div>
-
-<!-- END CONTENT -->
 
 
 
@@ -236,29 +154,13 @@ View the data on Urban’s Data Catalog
 
 
 
+<script src="js/vendor/pym.min.js"></script>
 
-
-
-
-<script src="https://api.mapbox.com/mapbox-gl-js/v1.9.1/mapbox-gl.js"></script>
-
-<script src="js/vendor/es6-promise.min.js"></script>
-<script src="js/vendor/es6-promise.auto.min.js"></script>
-<!-- <script src="js/vendor/fetch.min.js"></script>
-
-<script src = "js/vendor/filesaver.min.js"></script>
-<script src = "js/vendor/jszip.min.js"></script>
-<script src = "js/vendor/saveSvgAsPng.js"></script>
-<script src = "js/vendor/moment.min.js"></script>-->
-<script src = "js/vendor/greiner-hormann.min.js"></script>
-<script src = "js/vendor/jquery.1.8.min.js"></script>
-<script src = "js/vendor/jquery-ui.min.js"></script>
-<script src = "js/vendor/d3.v5.min.js"></script>
 <!-- <script src = "js/vendor/topojson.v2.min.js"></script> -->
 <!-- <script src = "js/vendor/d3-interpolate-path.min.js"></script> -->
 
 <!-- <script src = "js/constants.js"></script> -->
 <!-- <script src = "js/utils.js"></script> -->
-<script src = "js/main.js"></script>
+<!-- <script src = "js/main.js"></script> -->
 </body>
 </html>

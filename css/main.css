@@ -7,11 +7,9 @@ body{
 #mapColumn{
     width: 650px;
     display: inline-block;
-    float: left;
 }
 #barColumn{
     display: inline-block;
-    float: left;
 }
 #mapContainer{
 	display: inline-block;
@@ -46,7 +44,7 @@ body{
     font-weight: 300;
     font-size: 24px;
     line-height: 29px;
-    margin-bottom: 20px;
+    margin-bottom: 35px;
 }
 .mapSubhed{
     font-style: normal;
@@ -54,16 +52,35 @@ body{
     font-size: 16px;
     line-height: 22px;
     color: #353535;
+    margin-bottom: 3px;
+}
+.mapSubhed.industry span{
+    font-size: 14px;
+    display: block;
+    font-style: italic;
 }
 .tt-cell{
     display: inline-block;
-    margin-right: 40px;
+    height: 36px;
+    display: block;
+    float: left;
+}
+.tt-cell.us{
+    width: 176px;
 }
 .tt-cell.baseline{
     display: none;
+    position: relative;
+}
+.tt-cell.baseline div{
+    padding-top: 3px;
 }
 .tt-cell.tract{
     display: none;
+}
+.tt-cell.tract div{
+    top: -2px;
+    position: relative;
 }
 .tt-geo{
     font-size: 14px;
@@ -71,11 +88,19 @@ body{
     display: inline-block;
     margin-right: 10px;
 }
+.tt-geo.baseline{
+    max-width: 230px;
+    margin-right: 13px;
+}
 .tt-val{
     font-size: 14px;
     line-height: 27px;
     color: #1696D2;
     display: inline-block;
+}
+.tt-val.baseline{
+    top: -5px;
+    position: absolute;
 }
 .tt-row{
     margin-bottom: 20px;
@@ -83,6 +108,14 @@ body{
 }
 .tt-row.industry{
     display: none;
+    clear: both;
+    float: left;
+    margin-top: 12px;
+    width: 100%;
+    margin-bottom: 10px;
+}
+.tt-cell.tract{
+    float: right;
 }
 /**********************************************************/
 /**************************** MAP *************************/
