@@ -37,7 +37,7 @@ var industries = {
 	"X11":"Real Estate and Rental and Leasing",
 	"X12":"Professional, Scientific, and Technical Services",
 	"X13":"Management of Companies and Enterprises",
-	"X14":"Administrative and Support and Waste Management and Remediation Services",
+	"X14":"Administrative and Support Services",
 	"X15":"Educational Services",
 	"X16":"Health Care and Social Assistance",
 	"X17":"Arts, Entertainment, and Recreation",
@@ -48,29 +48,8 @@ var industries = {
 
 
 function getColors(industry){
-	var colors;
-	if(industry != "XOOO"){
-		colors =
-		[
-			1,
-			"#cfe8f3",
-			2,
-			"#a2d4ec",
-			3,
-			"#73bfe2",
-			4,
-			"#46abdb",
-			5,
-			"#1696d2",
-			6,
-			"#12719e",
-			7,
-			"#0a4c6a",
-			8,
-			"#062635"
-		]
-	}else{
-		colors = 
+
+	var colors = 
 		[
 			50,
 			"#cfe8f3",
@@ -89,7 +68,6 @@ function getColors(industry){
 			400,
 			"#062635"
 		]
-	}
 
 	return [
 			"interpolate-hcl",
@@ -164,7 +142,7 @@ function getDotRadius(){
 	return 6;
 }
 function getBarMargin(){
-	return {"top": 30, "bottom": 10, "left": 10, "right": 10}
+	return {"top": 30, "bottom": 10, "left": 25, "right": 10}
 }
 
 
@@ -286,13 +264,17 @@ function setActiveBaseline(averageData, geometry, baselineType, clicked){
 		}else{
 			d3.selectAll(".tt-geo.baseline").html(averageData.cbsa_name)
 			d3.select("#barTitle span").html(averageData.cbsa_name)
-
 		}
 		d3.select(".tt-val.all.baseline").text(intFormat(averageData["X000"]))
 		d3.select("#barTotalCount").text(intFormat(averageData["X000"]))
 		d3.select(".tt-val.industry.baseline").text(intFormat(averageData[industry]))
 
 	}
+	var th = d3.select("#barTitle").node().getBoundingClientRect().height
+	d3.select("#barTitleContainer")
+		.style("height", th + "px")
+	d3.select("#allContainer")
+		.style("margin-top", (34-th) + "px")
 
 
 	//update legend
@@ -422,8 +404,6 @@ function initBarChart(usAverageData){
 
 	svg.attr("width", w).attr("height", h);
 	var data = usAverageData[INIT_GEOID]["vs"]
-	tonyDatum = data.filter(function(o){ return o.k == "X14"})[0]
-	data.push({"k" : "Xdummy", "v": tonyDatum.v - .001})
 	data.sort(function(a,b){  return b.v - a.v })
 	var foo = Object.values(data.map(function(o){ return o.k }))
 	// foo.push("dummy")
@@ -448,29 +428,26 @@ function initBarChart(usAverageData){
       .call(d3.axisTop(x).tickSize([-height]).ticks(4))
 
 
-    var isTonyYet = false;
 	var gs = g
 		.selectAll("g.barGroup")
 		.data(data)
 		.enter().append("g")
 		.attr("class",function(d){ return "barGroup " + d.k })
 		.attr("transform", function(d) {
-			var transform = (isTonyYet) ? "translate(0," + (y0(d.k)-15) + ")" : "translate(0," + y0(d.k) + ")";
-			if(d.k == "Xdummy") isTonyYet = true;
-			return transform
+			return "translate(0," + y0(d.k) + ")";
 
 		})
-		// .attr("transform", function(d) { return "translate(0," + y0(d.k) + ")"; })
+		.on("mouseover", function(d){ changeIndustry(d.k) })
 
-	gs.on("mouseover", function(d){
-		if(d.k == "Xdummy") return false
-		changeIndustry(d.k)
-	})
+	
+	
 
 
 	var bg = gs.append("rect")
-		.attr("width", width)
-		.attr("height", y0.bandwidth())
+		.attr("width", width + 20)
+		.attr("height", y0.bandwidth()+4)
+		.attr("x",-10)
+		.attr("y",-2)
 		.attr("class", function(d){ return "barBg " + d.k})
 		.style("fill", "transparent")
 		.style("opacity",".55")
@@ -480,15 +457,15 @@ function initBarChart(usAverageData){
 		.attr("class", function(d){ return "baseline chartEl stick " + d.k })
 		.attr("x1",x(0))
 		.attr("x2", function(d){ return x(d.v) })
-		.attr("y1", function(d){ return d.k == "Xdummy" ? y1("baseline") - 15 : y1("baseline")})
-		.attr("y2", function(d){ return d.k == "Xdummy" ? y1("baseline") - 15 : y1("baseline")})
+		.attr("y1", y1("baseline"))
+		.attr("y2", y1("baseline"))
 		.style("stroke", "#696969")
 
 	var baselineDot = gs
 		.append("circle")
 		.attr("class", function(d){ return "baseline chartEl dot " + d.k })
 		.attr("cx", function(d){ return x(d.v) })
-		.attr("cy", function(d){ return d.k == "Xdummy" ? y1("baseline") - 15 : y1("baseline")})
+		.attr("cy", y1("baseline"))
 		.attr("r", getDotRadius())
 		.style("stroke", "#696969")
 		.style("fill", "#d2d2d2")
@@ -514,8 +491,7 @@ function updateBarChart(data, barType){
 	
 	var barData;
 	if(barType != "us"){
-		tonyValue = data["X14"] - .001
-		barData = [{"k": "Xdummy", "v": tonyValue}]
+		barData = []
 		for(key in data){
 			if(key.search("X") != -1 && key != "X000") barData.push({"k": key, "v": data[key]})
 		}
@@ -546,17 +522,11 @@ function updateBarChart(data, barType){
 		.domain(Object.values(barData.map(function(o){ return o.k })));
 
 
-	var isTonyYet = false;
 	
 	barData.forEach(function(b, i){
 		d3.select(".barGroup." + b.k)
 			.transition()
-				.attr("transform", function(d) {
-					var transform = (isTonyYet) ? "translate(0," + (y0(b.k)-15) + ")" : "translate(0," + y0(b.k) + ")";
-					if(b.k == "Xdummy") isTonyYet = true;
-					return transform
-
-				})
+				.attr("transform", "translate(0," + y0(b.k) + ")")
 
 	var barColor;
 	if(barType == "us"){
@@ -596,7 +566,7 @@ function initMap(){
 	var map = new mapboxgl.Map({
 		attributionControl: false,
 		container: 'mapContainer',
-		style: 'mapbox://styles/urbaninstitute/ck8zyvhje0v5a1jqthk5nzojz/draft',
+		style: 'mapbox://styles/urbaninstitute/ck91njx5n1d3g1iqhio2nyhem/draft',
 		center: [-95.5795, 39.8283],
 		zoom: US_ZOOM,
 		maxZoom: 12,

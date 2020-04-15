@@ -24,6 +24,8 @@ outData = {}
 for d in inData:
 	coords = d["geometry"]["coordinates"]
 	fips = d["properties"]["county_fips"]
+	properties = d["properties"]
+
 
 	# some coordinates are multipolygons (e.g. islands in michigan)
 	# for hover polygons, should display full multipolygon, so grab full coords
@@ -47,7 +49,7 @@ for d in inData:
 	if(fips in outData):
 		print(fips)
 	else:
-		outData[fips] = {"bounds": bounds, "coords": ""}
+		outData[fips] = {"bounds": bounds, "properties": properties}
 
 with open("data/sum_job_loss_county_reshaped.json","w") as f:
 	json.dump(outData, f)

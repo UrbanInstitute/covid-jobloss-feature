@@ -127,13 +127,21 @@ body{
 /************************ BAR CHART ***********************/
 /**********************************************************/
 #allContainer{
-    background: rgba(207,232,243,.55)
+    background: rgba(207,232,243,.55);
+    padding: 5px 8px;
+    margin-left: 9px;
+    margin-top: 17px;
+}
+#barTitleContainer{
+    height: 17px;
+    position: relative;
 }
 #barTitle{
     font-size: 14px;
     line-height: 17px;
     color: #333333;
-    width: 320px;
+    position: absolute;
+    bottom: 0px;
 }
 #barTotalCount{
     font-weight: bold;
@@ -152,9 +160,6 @@ body{
 }
 .tract.chartEl{
 	stroke: #fdbf11;
-}
-.X14.chartEl{
-    opacity: 0 !important;
 }
 .industryLabel{
 	font-size: 12px;
