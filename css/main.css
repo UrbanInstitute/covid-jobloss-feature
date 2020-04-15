@@ -1,13 +1,24 @@
 svg, body{
 	font-family: Lato;
 }
-
+body{
+    color: #000;
+}
+#mapColumn{
+    width: 650px;
+    display: inline-block;
+    float: left;
+}
+#barColumn{
+    display: inline-block;
+    float: left;
+}
 #mapContainer{
 	display: inline-block;
     position: relative;
     bottom: 0;
     width: 650px;
-    height: 450px;
+    height: 390px;
     float: left;
 }
 #barChartContainer{
@@ -20,6 +31,52 @@ svg, body{
     cursor: pointer;
 }
 
+
+/**********************************************************/
+/************************** Tooltip ***********************/
+/**********************************************************/
+#mapTitle{
+    font-weight: 300;
+    font-size: 24px;
+    line-height: 29px;
+    margin-bottom: 20px;
+}
+.mapSubhed{
+    font-style: normal;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 22px;
+    color: #353535;
+}
+.tt-cell{
+    display: inline-block;
+    margin-right: 40px;
+}
+.tt-cell.baseline{
+    display: none;
+}
+.tt-cell.tract{
+    display: none;
+}
+.tt-geo{
+    font-size: 14px;
+    color: #353535;
+    display: inline-block;
+    margin-right: 10px;
+}
+.tt-val{
+    font-size: 14px;
+    line-height: 27px;
+    color: #1696D2;
+    display: inline-block;
+}
+.tt-row{
+    margin-bottom: 20px;
+    display: block;
+}
+.tt-row.industry{
+    display: none;
+}
 /**********************************************************/
 /**************************** MAP *************************/
 /**********************************************************/

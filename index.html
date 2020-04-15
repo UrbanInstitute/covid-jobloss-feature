@@ -14,28 +14,66 @@
 </head>
 <body>
 <div id = "clickedBaselineId"></div>
+<div id = "clickedBaselineType"></div>
+<div id = "usData"></div>
+<div id = "baselineData"></div>
+<div id = "tractData"></div>
+
 
 <div id = "baselineControls">
 	<div class = "baselineControl county active">county</div>
 	<div class = "baselineControl cbsa">cbsa</div>
 </div>
-<div id = "mapContainer">
-	<div id = "zoomOutIcon">zoom out</div>
+
+
+<div id = "mapColumn">
+	<div id = "tt-container">
+		<div id = "mapTitle">Total estimated jobs lost</div>
+
+		<div class = "tt-row all">
+			<div class = "mapSubhed">Overall</div>
+			<div class = "tt-cell all us">
+				<div class = "tt-geo all us">US</div>
+				<div class = "tt-val all us">1,000</div>
+			</div>
+			<div class = "tt-cell all baseline">
+				<div class = "tt-geo all baseline">Montgomery County, MD</div>
+				<div class = "tt-val all baseline">100</div>
+			</div>
+			<div class = "tt-cell all tract">
+				<div class = "tt-geo all tract">Selected census tract</div>
+				<div class = "tt-val all tract">10</div>
+			</div>
+		</div>
+
+		<div class = "tt-row industry">
+			<div class = "mapSubhed industry">Within<span> an industry</span></div>
+
+			<div class = "tt-cell industry us">
+				<div class = "tt-geo industry us">US</div>
+				<div class = "tt-val industry us">1,000</div>
+			</div>
+			<div class = "tt-cell industry baseline">
+				<div class = "tt-geo industry baseline">Montgomery County, MD</div>
+				<div class = "tt-val industry baseline">100</div>
+			</div>
+			<div class = "tt-cell industry tract">
+				<div class = "tt-geo industry tract">Selected census tract</div>
+				<div class = "tt-val industry tract">10</div>
+			</div>
+		</div>
+
+	</div>
+
+	<div id = "mapContainer">
+		<div id = "zoomOutIcon">zoom out</div>
+	</div>
 </div>
 
-<div id = "barChartContainer">
-	<div id = "baselineName">
+<div id = "barColumn">
+	<div id = "barChartContainer">
+		<div id = "barAxisLabel">Number of jobs lost</div>
 	</div>
-
-	<div id = "baselineCount">
-	</div>
-
-	<div id = "tractName">
-	</div>
-	<div id = "tractCount">
-	</div>
-
-	<div id = "barAxisLabel">Number of jobs lost</div>
 </div>
 
 <script src="https://api.mapbox.com/mapbox-gl-js/v1.9.1/mapbox-gl.js"></script>
@@ -48,6 +86,7 @@
 <script src = "js/vendor/jszip.min.js"></script>
 <script src = "js/vendor/saveSvgAsPng.js"></script>
 <script src = "js/vendor/moment.min.js"></script>-->
+<script src = "js/vendor/greiner-hormann.min.js"></script>
 <script src = "js/vendor/jquery.1.8.min.js"></script>
 <script src = "js/vendor/jquery-ui.min.js"></script>
 <script src = "js/vendor/d3.v5.min.js"></script>
