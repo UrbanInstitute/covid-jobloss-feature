@@ -3,4 +3,3 @@ data/source/*
 *.geojson
 *.mbtiles
 sketches/*.png
-data/*
