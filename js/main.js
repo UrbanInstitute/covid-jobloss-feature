@@ -684,7 +684,7 @@ function initMap(){
 			map.setLayoutProperty("county-stroke", 'visibility', 'visible');
 		
 			bd = getCountyBoundsData()[e.features[0].properties.county_fips]
-
+console.log(bd.coords, e.features, e.features[0].geometry.coordinates,"\n","\n")
 			var hoverData = 
 				{
 					'type': 'Feature',
@@ -921,7 +921,6 @@ function initMap(){
 		dispatch.on("changeIndustry", function(industry){
 			baselineType = getClickedBaselineType()
 			colors = getColors(industry)
-			console.log(colors)
 
 			// if(map.getZoom() == US_ZOOM){
 			// 	map.setPaintProperty(baselineType + "-fill", 'fill-color', colors);
@@ -953,7 +952,6 @@ function initControls(){
 		}
 	})
 	d3.select("#allContainer").on("mouseover", function(){
-		console.log("foo")
 		changeIndustry("X000")
 	})
 }
@@ -980,8 +978,8 @@ rawCbsaBounds
 	// usAverageData = rawUSAverageData;
 	// countyBoundsData = rawcountyBoundsData;
 	// cbsaData = rawcountyBoundsData;
-	d3.select("#countyBoundsData").datum(rawCountyBounds)
-	d3.select("#cbsaBoundsData").datum(rawCbsaBounds)
+	// d3.select("#countyBoundsData").datum(rawCountyBounds)
+	// d3.select("#cbsaBoundsData").datum(rawCbsaBounds)
 
 	initTooltip(rawUSAverageData);
 	initBarChart(rawUSAverageData);
@@ -992,9 +990,10 @@ rawCbsaBounds
 
 
 d3.json("data/sum_job_loss_us.json").then(function(rawUSAverageData){
-	d3.json("data/sum_job_loss_county_reshaped.json").then(function(countyBounds){
-		d3.json("data/sum_job_loss_cbsa_reshaped.json").then(function(cbsaBounds){
-			init(rawUSAverageData, countyBounds, cbsaBounds)
-		})
-	})
+	// d3.json("data/sum_job_loss_county_reshaped.json").then(function(countyBounds){
+		// d3.json("data/sum_job_loss_cbsa_reshaped.json").then(function(cbsaBounds){
+			// init(rawUSAverageData, countyBounds, cbsaBounds)
+			init(rawUSAverageData, false, false)
+		// })
+	// })
 })
