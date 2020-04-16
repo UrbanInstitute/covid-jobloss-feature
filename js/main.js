@@ -32,9 +32,6 @@ function IS_PHONE(){
 	return d3.select("#isPhone").style("display") == "block"
 }
 
-d3.select(window).on("resize", function(){
-	console.log(IS_PHONE(), IS_MOBILE())
-})
 
 var industries = {
 	"X01":"Agriculture, Forestry, Fishing, and Hunting",
@@ -275,16 +272,20 @@ function changeIndustry(industry, clicked){
 		d3.select("#barTitle").style("font-weight","normal").style("color","#696969")
 		d3.selectAll(".lineclose").style("opacity",0)
 		d3.selectAll(".lineclose." + industry).style("opacity",1)
-
 	}
 
 	
 	d3.select(".tt-row.industry").style("display",display)
 
 	var usVal = (industry == "X000") ? usTotal : getUsAverageData().filter(function(o){ return o.k == industry})[0].v
+	var baselineVal = getClickedBaselineData()[industry]
+	var tractVal = getClickedTractData()[industry]
 
 	d3.select(".mapSubhed.industry").html("Within<span>" + industries[industry] + "</span>")
 	d3.select(".tt-val.industry.us").text(intFormat(usVal))
+	d3.select(".tt-val.industry.baseline").text(intFormat(baselineVal))
+	d3.select(".tt-val.industry.tract").text(intFormat(tractVal))
+
 
 
 
@@ -638,7 +639,6 @@ function updateBarChart(data, barType){
 		height = h - margin.top - margin.bottom
 
 	tonyValue = data["X14"] - .001
-	// console.log(tonyValue)
 	var barData = [{"k": "Xdummy", "v": tonyValue}]
 	if(barType != "us"){
 		var barData = [{"k": "Xdummy", "v": tonyValue}]
@@ -652,7 +652,6 @@ function updateBarChart(data, barType){
 	}
 	barData = barData.sort(function(a,b){  return b.v - a.v })
 
-// if(barType == "us") console.log(barData)
 	var max;
 	if(barType == "us"){
 		max = US_MAX
@@ -664,8 +663,7 @@ function updateBarChart(data, barType){
 	else{
 		max = data.max
 	}
-		// console.log(data)
-	// console.log(getClickedBaselineData())
+
 	
 	var x = d3.scaleLinear()
 		.rangeRound([0,width-margin.right])
@@ -845,25 +843,25 @@ function initMap(){
 			// if(map.getZoom())
 		// e.preventDefault()
 		// f = map.querySourceFeatures('composite', {sourceLayer: 'counties_new-2ynusr', filter: ["==", e.features[0].properties.county_fips, ["get","county_fips"]]})	
-// console.log(e.features)
 
 
 			map.setLayoutProperty("county-fill", 'visibility', 'visible');
 			map.setLayoutProperty("county-stroke", 'visibility', 'visible');
 		
-			bd = getCountyBoundsData()[e.features[0].properties.county_fips]
-			// console.log(bd)
-// console.log(bd.coords, e.features, e.features[0].geometry.coordinates,"\n","\n")
-// console.log(e.features)
 
+// var f = map.queryRenderedFeatures({ layers: ['county-stroke'], filter: ["==", e.features[0].properties.county_fips, ["get","county_fips"]]})	
+// console.log(f)
+
+
+
+			bd = getCountyBoundsData()[e.features[0].properties.county_fips]
 			var f = e.features;
+			console.log(e)
 			const l = f.length
-			// console.dir(l)
 			var hoverData;
 			if(l > 1){
 				var coords = []
-				console.log(f.length)
-				for(var i = 0; i< f.length; i++){
+				for(var i = 0; i < l; i++){
 					coords.push(f[i].geometry.coordinates[0])
 				}
 				hoverData = 
@@ -885,7 +883,6 @@ function initMap(){
 					}
 
 			}
-			// console.log(JSON.stringify(coords))
 			tractMax = e.features[0].properties.tmax
 			map.getSource('hoverBaselinePolygonSource').setData(hoverData);
 			setActiveBaseline(e.features[0].properties, "", "county", false)	
@@ -897,7 +894,6 @@ function initMap(){
 			// var coordinates = e.features[0].geometry.coordinates[0]		
 			bd = getCountyBoundsData()[e.features[0].properties.county_fips]
 			var f = e.features;
-			console.log(f.length, f[0].properties.county_fips)
 			var coords = []
 			for(var i = 0; i< f.length; i++){
 				coords.push(f[i].geometry.coordinates)
@@ -924,7 +920,6 @@ function initMap(){
 			map.setLayoutProperty("cbsa-stroke", 'visibility', 'visible');
 		
 			bd = getCbsaBoundsData()[e.features[0].properties.cbsa]
-			// console.log(e.features[0].properties.cbsa, bd)
 
 			// var hoverData = 
 			// 	{
@@ -937,7 +932,6 @@ function initMap(){
 			// map.getSource('hoverBaselinePolygonSource').setData(hoverData);
 			tractMax = e.features[0].properties.tmax
 			var f = e.features;
-			console.log(f.length, f[0].properties.county_fips)
 			var coords = []
 			for(var i = 0; i< f.length; i++){
 				coords.push(f[i].geometry.coordinates)
@@ -964,7 +958,6 @@ function initMap(){
 			// var coordinates = e.features[0].geometry.coordinates[0]		
 			bd = getCbsaBoundsData()[e.features[0].properties.cbsa]
 			var f = e.features;
-			console.log(f.length, f[0].properties.county_fips)
 			var coords = []
 			for(var i = 0; i< f.length; i++){
 				coords.push(f[i].geometry.coordinates)
@@ -1012,6 +1005,7 @@ function initMap(){
 		})
 		map.on("click", "job-loss-by-tract", function(e){
 			if(map.getZoom() == US_ZOOM) return false
+			if(getClickedBaseline() == "us" || typeof(getClickedBaseline()) == "undefined") return false
 			setActiveTract(e.features[0].properties, e.features[0].geometry, true)
 			
 		})
@@ -1021,6 +1015,7 @@ function initMap(){
 			d3.select("#tractData").datum("")
 			d3.select("#tractGeometry").datum("")
 			map.getSource('hoverTractPolygonSource').setData(hideHoverData);
+			d3.selectAll(".tt-cell.tract").style("display","none")
 		})
 
 
@@ -1093,13 +1088,6 @@ function initMap(){
 		})
 		dispatch.on("zoomIn", function(bounds){
 			// var bounds = new mapboxgl.LngLatBounds()
-			// // console.log(coordinates)
-			// for(var i = 0; i < coordinates.length; i++){
-			// 	bounds.extend(coordinates[i])
-			// }
-
-// e.bounds
-// console.log(bounds)
 
 			map.fitBounds(
 				bounds,
@@ -1242,7 +1230,6 @@ function initPhone(usData, countyData, cbsaData){
     $( "#countySearch" ).autocomplete({
       source: countyNames,
         select: function( event, ui ) {
-        	// console.log(ui.item.value)
 			setActiveBaseline(countyData[ui.item.value]["properties"], "", "county", true)	
 
         	// $(this).text(ui.item.label)
@@ -1253,7 +1240,6 @@ function initPhone(usData, countyData, cbsaData){
     $( "#cbsaSearch" ).autocomplete({
       source: cbsaNames,
         select: function( event, ui ) {
-        	// console.log(ui.item.value)
 			setActiveBaseline(cbsaData[ui.item.value]["properties"], "", "cbsa", true)	
 
         	// $(this).text(ui.item.label)
