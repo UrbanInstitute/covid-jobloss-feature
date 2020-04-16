@@ -312,6 +312,36 @@ body{
 #isMobile, #isPhone{
     display: none;
 }
+#mobileMenu{
+    display: none;
+    margin-left: 18px;
+    height: 220px;
+
+}
+#mobileMenu input{
+    width: 100%;
+    height: 40px;
+    font-size: 18px;
+    padding-left: 10px;
+    text-overflow: ellipsis;
+}
+#mm-title{
+    font-size: 23px;
+    font-weight: 100;
+    margin-bottom: 12px;
+}
+#mm-disclaimer{
+    font-style: italic;
+    font-weight: bold;
+    color: #1696d2;
+    margin-top: 10px;
+}
+#cbsaSearch{
+    display: none;
+}
+#countySearch{
+    display: block;
+}
 
 @media(max-width: 995px){
     #isMobile{
@@ -361,4 +391,11 @@ body{
     #allContainer{
         background: transparent;
     }
+    #mobileMenu{
+        display: block;
+    }
+    #allContainer{
+        width:262px;
+    }
+
 }

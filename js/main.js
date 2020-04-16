@@ -395,6 +395,23 @@ function changeBaselineType(newBaselineType){
 
 	if(newBaselineType == currentBaselineType){ return false }
 
+
+	if(IS_PHONE()){
+		if(newBaselineType == "county"){
+			d3.select("#cbsaSearch").style("display","none")
+			d3.select("#countySearch").style("display","block")
+		}else{
+			d3.select("#cbsaSearch").style("display","block")
+			d3.select("#countySearch").style("display","none")
+		}
+		setActiveBaseline(getUsAverageData(),"", "us", true)
+		d3.select(".baselineTab." + currentBaselineType).classed("active", false)
+		d3.select(".baselineTab." + newBaselineType).classed("active", true)
+
+		return false
+	}
+
+
 	if(d3.select("#zoomOutIcon").style("opacity") != 0){
 		if(currentBaselineType == "county"){
 			// var newCbsa = countyToCbsa[currentBaselineId][0]
@@ -409,6 +426,7 @@ function changeBaselineType(newBaselineType){
 			if(getClickedTractData() != ""){
 				setActiveTract(getClickedTractData(), getClickedTractGeometry(), true)
 			}
+				
 			dispatch.call("viewByCbsa", null)
 			// dispatch.call("activateGeoid",null, "cbsa", newCbsa)
 			
@@ -424,6 +442,7 @@ function changeBaselineType(newBaselineType){
 			if(getClickedTractData() != ""){
 				setActiveTract(getClickedTractData(), getClickedTractGeometry(), true)
 			}
+
 			dispatch.call("viewByCounty", null)
 			// dispatch.call("activateGeoid",null, "county", newCounty)	
 			
@@ -1202,6 +1221,48 @@ function initTooltip(usAverageData){
 	d3.select("#tractData").datum("")
 	d3.select("#tractGeometry").datum("")
 }
+function initPhone(usData, countyData, cbsaData){
+	d3.selectAll(".baselineTab").classed("disabled",false)
+
+    var cbsaNames = Object.entries(cbsaData)
+    	.map(function(o){
+    		return {
+    			"label" : o[1]["properties"]["cbsa_name"],
+    			"value" : o[0]
+    		}
+    	})
+
+    var countyNames = Object.entries(countyData)
+    	.map(function(o){
+    		return {
+    			"label" : o[1]["properties"]["county_name"] + " County, " + o[1]["properties"]["state_name"],
+    			"value" : o[0]
+    		}
+    	})
+    $( "#countySearch" ).autocomplete({
+      source: countyNames,
+        select: function( event, ui ) {
+        	// console.log(ui.item.value)
+			setActiveBaseline(countyData[ui.item.value]["properties"], "", "county", true)	
+
+        	// $(this).text(ui.item.label)
+        	return false;
+        }
+
+    });
+    $( "#cbsaSearch" ).autocomplete({
+      source: cbsaNames,
+        select: function( event, ui ) {
+        	// console.log(ui.item.value)
+			setActiveBaseline(cbsaData[ui.item.value]["properties"], "", "cbsa", true)	
+
+        	// $(this).text(ui.item.label)
+        	return false;
+        }
+
+    });
+
+}
 // function updateTooltip()
 
 var rc;
@@ -1219,6 +1280,8 @@ function init(
 	initBarChart(rawUSAverageData);
 	if(!IS_PHONE()){
 		initMap();
+	}else{
+		initPhone(rawUSAverageData, rawCountyBounds, rawCbsaBounds)
 	}
 	initControls();
 	
