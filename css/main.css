@@ -124,13 +124,12 @@ body{
 /**********************************************************/
 
 #zoomOutIcon{
-    position: absolute;
-    top: 0px;
-    right: 0px;
-    z-index: 1;
-    text-transform: uppercase;
-    font-weight: bold;
-    font-size: 20px;
+    float: right;
+    font-size: 14px;
+    font-style: italic;
+    margin-top: 5px;
+    color: #1696d2;
+    cursor: pointer;
     opacity: 0;
 }
 .baselineControl{
@@ -157,6 +156,30 @@ body{
     color: #9d9d9d;
     pointer-events: none;
 }
+#legendContainer{
+    float: right;
+    clear: both;
+    margin-top: 10px;
+    position: relative;
+}
+.lKey{
+    width: 30px;
+    height: 20px;
+    display: inline-block;
+    position: relative;
+}
+.lLabel{
+    position: absolute;
+    top: 19px;
+    right: -4px;
+    font-size: 12px;
+}
+.ll18{
+    display: none;
+}
+.ll0{
+    left: -3px;
+}
 
 /**********************************************************/
 /************************ BAR CHART ***********************/
@@ -166,6 +189,10 @@ body{
     padding: 5px 8px;
     margin-left: 9px;
     margin-top: 17px;
+    cursor: pointer;
+}
+#barChartContainer svg{
+    margin-top: 16px;
 }
 #barTitleContainer{
     height: 17px;
@@ -175,6 +202,7 @@ body{
     font-size: 14px;
     line-height: 17px;
     color: #333333;
+    font-weight: bold;
     position: absolute;
     bottom: 0px;
 }
@@ -186,6 +214,9 @@ body{
 }
 .chartEl{
 	stroke-width: 2px;
+}
+.X14.chartEl{
+    opacity: 0 !important;
 }
 .baseline.chartEl{
 	stroke: #1696d2;
@@ -210,5 +241,6 @@ body{
     font-size: 12px;
     font-style: italic;
     position: absolute;
-    left: 170px;
+    left: 90px;
+    margin-top: 11px;
 }
