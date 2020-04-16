@@ -355,6 +355,7 @@ function setActiveBaseline(averageData, geometry, baselineType, clicked){
 
 		if(baselineType == "county"){
 			var fullName;
+			console.log(averageData)
 			if(averageData.county_name.toUpperCase().search("CITY")){
 				fullName = averageData.county_name + ", " + averageData.state_name
 			}else{
@@ -800,7 +801,7 @@ function initMap(){
 	var map = new mapboxgl.Map({
 		attributionControl: false,
 		container: 'mapContainer',
-		style: 'mapbox://styles/urbaninstitute/ck921rtmi1qwy1imz9u97ce38',
+		style: 'mapbox://styles/urbaninstitute/ck932c9lb0tt91imwh2egyycq',
 		center: US_CENTER,
 		zoom: US_ZOOM,
 		maxZoom: 12,
@@ -970,18 +971,47 @@ function initMap(){
 			map.setLayoutProperty("cbsa-fill", 'visibility', 'visible');
 			map.setLayoutProperty("cbsa-stroke", 'visibility', 'visible');
 		
-			bd = getCbsaBoundsData()[e.features[0].properties.cbsa]
+			
 
-			// var hoverData = 
-			// 	{
-			// 		'type': 'Feature',
-			// 		'geometry': {
-			// 			'type': 'MultiPolygon',
-			// 			'coordinates': bd.coords
-			// 					}
-			// 	}
-			// map.getSource('hoverBaselinePolygonSource').setData(hoverData);
+			bd = getCountyBoundsData()[e.features[0].properties.cbsa]
+			var f = e.features;
+			console.log(e)
+			const l = f.length
+			var hoverData;
+			if(l > 1){
+				var coords = []
+				for(var i = 0; i < l; i++){
+					coords.push(f[i].geometry.coordinates[0])
+				}
+				hoverData = 
+					{
+						'type': 'Feature',
+						'geometry': {
+							'type': 'MultiPolygon',
+							'coordinates': coords
+									}
+					}
+			}else{
+				hoverData = 
+					{
+						'type': 'Feature',
+						'geometry': {
+							'type': 'Polygon',
+							'coordinates': f[0].geometry.coordinates
+									}
+					}
+
+			}
 			tractMax = e.features[0].properties.tmax
+			map.getSource('hoverBaselinePolygonSource').setData(hoverData);
+			setActiveBaseline(e.features[0].properties, "", "cbsa", false)	
+		})
+		map.on("click", "county-fill", function(e){
+			if(getClickedButton() == "cbsa") return false
+			d3.select("#clickedBaselineType").datum("county")
+			
+			// var coordinates = e.features[0].geometry.coordinates[0]		
+			bd = getCountyBoundsData()[e.features[0].properties.county_fips]
 			var f = e.features;
 			var coords = []
 			for(var i = 0; i< f.length; i++){
@@ -997,12 +1027,22 @@ function initMap(){
 				}
 			map.getSource('hoverBaselinePolygonSource').setData(hoverData);
 
+			setActiveBaseline(e.features[0].properties, hoverData, "county", true)	
+			// g = f.geometry
+			// var data = {'type': 'Feature', 'geometry': g}
 
-
-			setActiveBaseline(e.features[0].properties, "", "cbsa", false)	
+			zoomIn("county", e.features[0].properties.county_fips, bd.bounds)
 
 
 		})
+		// map.on('mouseout', 'cbsa-fill', function(e) {
+		// 	if(getClickedButton() == "county") return false
+		// 	console.log()
+		// 	// map.setFeatureState({"source":'composite', sourceLayer: 'cbsa-stroke', "id": parseInt(e.features[0].properties.cbsa)},{"active": false})	
+		// 	// console.log(map.getFeatureState({"source":'composite', sourceLayer: 'cbsa-stroke', "id": parseInt(e.features[0].properties.cbsa)})	)
+
+
+		// })
 		map.on("click", "cbsa-fill", function(e){
 			if(getClickedButton() == "county_fips") return false
 			d3.select("#clickedBaselineType").datum("cbsa")
