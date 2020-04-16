@@ -238,8 +238,8 @@ body{
     font-weight: bold;
     margin-bottom: 4px;
 }
-#mapboxgl-ctrl-logo{
-    margin-left: 500px;
+.mapboxgl-ctrl-logo{
+    margin-left: 500px !important;
 }
 .lKey{
     width: 30px;
@@ -388,6 +388,10 @@ body{
     #isMobile{
         display: block;
     }
+.mapboxgl-ctrl-bottom-right {
+    right: 0;
+    bottom: 50px;
+}
     #mapColumn{
         width: 270px;
         margin-left: calc(50% - 300px);
@@ -415,6 +419,10 @@ body{
 */    #mapContainer{
         width: 270px;
     }
+.mapboxgl-ctrl-logo{
+    margin-left: -9px !important;
+    top: -350px;
+    position: relative;}
 }
 @media(max-width: 630px){
     #isPhone{
@@ -442,4 +450,4 @@ body{
         width:262px;
     }
 
-}
+}`
