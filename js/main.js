@@ -9,7 +9,7 @@ var dispatch = d3.dispatch("zoomOut", "zoomIn", "changeIndustry", "viewByCounty"
 // countyToCbsa
 
 var INIT_GEOID = "99"
-var US_ZOOM = 3.0
+var US_ZOOM = 3.0;
 var US_MAX = 3550000;
 var US_CENTER = [-95.5795, 37.8283]
 var usTotal;
@@ -24,6 +24,17 @@ var intFormat = function(v){
 		return d3.format(",.0f")(v)
 	}
 }
+
+function IS_MOBILE(){
+	return d3.select("#isMobile").style("display") == "block"
+}
+function IS_PHONE(){
+	return d3.select("#isPhone").style("display") == "block"
+}
+
+d3.select(window).on("resize", function(){
+	console.log(IS_PHONE(), IS_MOBILE())
+})
 
 var industries = {
 	"X01":"Agriculture, Forestry, Fishing, and Hunting",
@@ -43,7 +54,7 @@ var industries = {
 	"X15":"Educational Services",
 	"X16":"Health Care and Social Assistance",
 	"X17":"Arts, Entertainment, and Recreation",
-	"X18":"Accomodation and Food Services",
+	"X18":"Accommodation and Food Services",
 	"X19":"Other Services",
 	"X20":"Public Administration",
 }
@@ -175,12 +186,11 @@ function getBarMargin(){
 function getClickedBaselineType(){
 	// return "county", "cbsa"
 	// if(	d3.select("#zoomOutIcon").style("opacity") == 0) return "us"
-	// else return d3.select(".baselineControl.active").classed("county") ? "county" : "cbsa"
 	return d3.select("#clickedBaselineType").datum()
 
 }
 function getClickedButton(){
-	return d3.select(".baselineControl.active").classed("county") ? "county" : "cbsa"
+	return d3.select(".baselineTab.active").classed("county") ? "county" : "cbsa"
 }
 function getClickedIndustry(){
 	return d3.select("#clickedIndustry").datum()
@@ -239,6 +249,7 @@ function zoomIn(baselineType, geoid, coordinates){
 }
 
 function changeIndustry(industry, clicked){
+	if(IS_PHONE()) return false
 	if(clicked){
 		d3.select("#clickedIndustry").datum(industry)
 		d3.selectAll("line.lineclose").style("stroke","#696969")
@@ -279,9 +290,6 @@ function changeIndustry(industry, clicked){
 
 	dispatch.call("changeIndustry", null, industry)
 }
-function disableBaselineType(baselineType){
-	d3.select(".baselineControl." + baselineType).classed("disabled",true)
-}
 function setActiveBaseline(averageData, geometry, baselineType, clicked){
 	if(clicked && geometry != ""){
 		d3.select("#baselineGeometry").datum(geometry)
@@ -295,7 +303,7 @@ function setActiveBaseline(averageData, geometry, baselineType, clicked){
 		d3.selectAll(".tt-cell.baseline").style("display","inline-block")
 
 		var geoid = (baselineType == "county") ? averageData["county_fips"] : averageData["cbsa"]
-		d3.selectAll(".baselineControl").classed("disabled",false)
+		
 
 		if(clicked){
 			d3.select("#clickedBaselineId").datum(geoid)
@@ -350,11 +358,6 @@ function setActiveTract(tractData, geometry, clicked){
 
 	d3.selectAll(".tt-cell.tract").style("display","inline-block")
 	d3.select("#barTitle span").html("the selected tract")
-
-
-	// d3.select("#clickedBaselineId").datum(geoid)
-	// d3.select("#baselineData").datum(averageData)
-	// d3.selectAll(".baselineControl").classed("disabled",false)
 
 	var industry = getIndustry()
 
@@ -437,8 +440,8 @@ function changeBaselineType(newBaselineType){
 
 	}
 
-	d3.select(".baselineControl." + currentBaselineType).classed("active", false)
-	d3.select(".baselineControl." + newBaselineType).classed("active", true)
+	d3.select(".baselineTab." + currentBaselineType).classed("active", false)
+	d3.select(".baselineTab." + newBaselineType).classed("active", true)
 
 }
 
@@ -733,7 +736,7 @@ function initMap(){
 		center: US_CENTER,
 		zoom: US_ZOOM,
 		maxZoom: 12,
-		minZoom: 3
+		minZoom: US_ZOOM
 	});
 
 	map.addControl(new mapboxgl.AttributionControl({
@@ -751,6 +754,8 @@ function initMap(){
 		
 		map.setLayoutProperty("county-fill", 'visibility', 'visible');
 		map.setLayoutProperty("county-stroke", 'visibility', 'none');
+
+		d3.selectAll(".baselineTab").classed("disabled",false)
 
 		var hideHoverData = {
 			'type': 'Feature',
@@ -1116,7 +1121,7 @@ function initMap(){
 			map.setLayoutProperty("cbsa-stroke", 'visibility', 'none');
 			
 			map.setLayoutProperty("county-fill", 'visibility', 'visible')
-			map.setLayoutProperty("county-stroke", 'visibility', 'visible');
+			map.setLayoutProperty("county-stroke", 'visibility', 'none');
 		})
 		dispatch.on("viewByCbsa", function(){
 			d3.select("#clickedBaselineType").datum("us")
@@ -1124,7 +1129,7 @@ function initMap(){
 
 			map.setLayoutProperty("cbsa-fill", 'visibility', 'visible');
 			map.setLayoutProperty("cbsa-mask", 'visibility', 'visible');
-			map.setLayoutProperty("cbsa-stroke", 'visibility', 'visible');
+			map.setLayoutProperty("cbsa-stroke", 'visibility', 'none');
 
 			map.setLayoutProperty("county-fill", 'visibility', 'none');
 			map.setLayoutProperty("county-stroke", 'visibility', 'none');
@@ -1168,7 +1173,7 @@ function initControls(){
 	d3.select("#zoomOutIcon")
 		.on("click", zoomOut)
 
-	d3.selectAll(".baselineControl").on("click", function(){
+	d3.selectAll(".baselineTab").on("click", function(){
 		if(d3.select(this).classed("active")) return false
 
 		else{
@@ -1212,7 +1217,9 @@ function init(
 
 	initTooltip(rawUSAverageData);
 	initBarChart(rawUSAverageData);
-	initMap();
+	if(!IS_PHONE()){
+		initMap();
+	}
 	initControls();
 	
 }

@@ -11,6 +11,8 @@ body{
 }
 #barColumn{
     display: inline-block;
+    top: -20px;
+    position: relative;
 }
 #mapContainer{
 	display: inline-block;
@@ -39,14 +41,74 @@ body{
 }
 
 
+/*********************************************************************************/
+/******************************      TAB WRAPPER      ****************************/
+/*********************************************************************************/
+#baselineTabs{
+    width: 100%;
+    height: 45px;
+    margin-bottom: 45px;
+}
+#baselineTabs.county{
+    border-bottom: 2px solid #D2D2D2;
+}
+#baselineTabs.cbsa{
+    border-bottom: 2px solid #D2D2D2;
+}
+.baselineTab{
+    height: 27px;
+    display: inline-block;
+    float: right;
+    padding: 9px;
+    padding-bottom: 2px;
+    /*background: green;*/
+    width: 90px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+    color: #000;
+    background: #f5f5f5;
+    margin-bottom: 40px;
+    margin-top: 5px;
+    cursor: pointer;
+    border-top: 2px solid #D2D2D2;
+    border-left: 2px solid #D2D2D2;
+    border-right: 2px solid #D2D2D2;
+    border-bottom: 2px solid #D2D2D2;
+}
+.baselineTab.county{
+    margin-right: 19px;
+}
+.baselineTab.cbsa{
+    margin-right: calc(50% - 123px);
+}
+.baselineTab.active{
+    background: #fff;
+    font-weight: bold;
+}
+.baselineTab.active{
+    color: #1696D2;
+    border-top: 2px solid #D2D2D2;
+    border-left: 2px solid #D2D2D2;
+    border-right: 2px solid #D2D2D2;
+    border-bottom: 2px solid #fff;
+}
+.baselineTab.disabled{
+    color: #9d9d9d;
+    pointer-events: none;
+}
+
+
+
 /**********************************************************/
 /************************** Tooltip ***********************/
 /**********************************************************/
 #mapTitle{
     font-weight: 300;
     font-size: 24px;
+    font-weight: 100;
     line-height: 29px;
-    margin-bottom: 35px;
+    margin-bottom: 29px;
 }
 .mapSubhed{
     font-style: normal;
@@ -243,4 +305,60 @@ body{
     position: absolute;
     left: 90px;
     margin-top: 11px;
+}
+
+
+
+#isMobile, #isPhone{
+    display: none;
+}
+
+@media(max-width: 995px){
+    #isMobile{
+        display: block;
+    }
+    #mapColumn{
+        width: 270px;
+        margin-left: calc(50% - 300px);
+    }
+    #mapTitle{
+        white-space: nowrap;
+    }
+    #barColumn{
+        top: 38px;
+    }
+    .tt-cell.tract {
+        float: left;
+    }
+    .tt-cell{
+        height: 27px;
+    }
+    #mapContainer{
+
+    }
+/*    #barColumn{
+        display: inline-block;
+        top: -20px;
+        position: relative;
+    }
+*/    #mapContainer{
+        width: 270px;
+    }
+}
+@media(max-width: 630px){
+    #isPhone{
+        display: block;
+    }
+    #isMobile{
+        display: none;
+    }
+    #barColumn {
+        top: -32px;
+    }
+    #mapColumn, .barBg, .lineClose{
+        display: none;
+    }
+    #allContainer{
+        background: transparent;
+    }
 }
