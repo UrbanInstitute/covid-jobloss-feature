@@ -814,7 +814,7 @@ function initMap(){
 		compact: true
 	}), "top-right");
 
-	// map.scrollZoom.disable();
+	map.scrollZoom.disable();
 	map.addControl(new mapboxgl.NavigationControl({"showCompass": false}), "bottom-right");
 
 
