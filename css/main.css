@@ -325,6 +325,12 @@ body{
     padding-left: 10px;
     border: 1px solid #696969;
     text-overflow: ellipsis;
+    font-style: italic;
+    color: #9d9d9d;
+}
+#mobileMenu input.active{
+    color: #333;
+    font-style: normal;
 }
 #mm-title{
     font-size: 23px;
@@ -342,6 +348,22 @@ body{
 }
 #countySearch{
     display: block;
+}
+
+#mm-industryContainer{
+    display: none;
+}
+#mm-industryContainer{
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+}
+#mm-industryVal{
+    color: #1696d2;
+    font-weight: normal;
+}
+#mm-industryLabel{
+    margin-top: 8px;
 }
 
 @media(max-width: 995px){
@@ -383,10 +405,13 @@ body{
     #isMobile{
         display: none;
     }
+    #mm-industryContainer{
+        display: block;
+    }
     #barColumn {
         top: -32px;
     }
-    #mapColumn, .barBg, .lineClose{
+    #mapColumn{
         display: none;
     }
     #allContainer{

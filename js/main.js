@@ -246,7 +246,48 @@ function zoomIn(baselineType, geoid, coordinates){
 }
 
 function changeIndustry(industry, clicked){
-	if(IS_PHONE()) return false
+	var usVal = (industry == "X000") ? usTotal : getUsAverageData().filter(function(o){ return o.k == industry})[0].v
+	var baselineVal;
+	if(typeof(getClickedBaseline()) == "undefined" || getClickedBaseline() == "us"){
+		baselineVal = ""
+	}else{
+		baselineVal = getClickedBaselineData()[industry]
+	}
+
+	if(IS_PHONE()){
+		if(industry == "X000"){
+			d3.select("#mm-industryContainer").style("display","none")
+		}else{
+			d3.select("#mm-industryContainer").style("display","block")
+			d3.select("#mm-industryLabel").html(industries[industry])
+		}
+		
+		if(typeof(getClickedBaseline()) == "undefined" || getClickedBaseline() == "us"){
+			d3.select("#mm-industryVal").text(intFormat(usVal))
+		}else{
+			d3.select("#mm-industryVal").text(intFormat(baselineVal))
+		}
+	// d3.selectAll(".barBg").style("fill", "transparent").classed("active", false)
+	// var display;
+	// if(industry == "X000"){
+	// 	display = "none"
+	// 	d3.select("#allContainer").style("background", "rgba(207,232,243,.55)")
+	// 	d3.select("#barTitle").style("font-weight","bold").style("color","#333")
+	// 	d3.selectAll(".industryLabel").style("fill","#696969").style("font-weight","normal")
+	// 	d3.selectAll(".lineclose").style("opacity",0)
+	// }else{
+	// 	display = "block"
+	// 	d3.select("#allContainer").style("background", "rgba(255,255,255,1)")
+	// 	d3.select(".barBg." + industry).style("fill", "#CFE8F3").classed("active", true)
+	// 	d3.selectAll(".industryLabel").style("fill","#696969").style("font-weight","normal")
+	// 	d3.select(".industryLabel." + industry).style("fill","#333").style("font-weight","bold")
+	// 	d3.select("#barTitle").style("font-weight","normal").style("color","#696969")
+	// 	d3.selectAll(".lineclose").style("opacity",0)
+	// 	d3.selectAll(".lineclose." + industry).style("opacity",1)
+	// }
+
+		// return false
+	}
 	if(clicked){
 		d3.select("#clickedIndustry").datum(industry)
 		d3.selectAll("line.lineclose").style("stroke","#696969")
@@ -278,7 +319,6 @@ function changeIndustry(industry, clicked){
 	d3.select(".tt-row.industry").style("display",display)
 
 	var usVal = (industry == "X000") ? usTotal : getUsAverageData().filter(function(o){ return o.k == industry})[0].v
-	var baselineVal = getClickedBaselineData()[industry]
 	var tractVal = getClickedTractData()[industry]
 
 	d3.select(".mapSubhed.industry").html("Within<span>" + industries[industry] + "</span>")
@@ -314,8 +354,14 @@ function setActiveBaseline(averageData, geometry, baselineType, clicked){
 		var industry = getIndustry()
 
 		if(baselineType == "county"){
-			d3.selectAll(".tt-geo.baseline").html(averageData.county_name + " County, " + averageData.state_name)
-			d3.select("#barTitle span").html(averageData.county_name + " County, " + averageData.state_name)
+			var fullName;
+			if(averageData.county_name.toUpperCase().search("CITY")){
+				fullName = averageData.county_name + ", " + averageData.state_name
+			}else{
+				fullName = averageData.county_name + " County, " + averageData.state_name
+			}
+			d3.selectAll(".tt-geo.baseline").html(fullName)
+			d3.select("#barTitle span").html(fullName)
 		}else{
 			d3.selectAll(".tt-geo.baseline").html(averageData.cbsa_name)
 			d3.select("#barTitle span").html(averageData.cbsa_name)
@@ -323,6 +369,13 @@ function setActiveBaseline(averageData, geometry, baselineType, clicked){
 		d3.select(".tt-val.all.baseline").text(intFormat(averageData["X000"]))
 		d3.select("#barTotalCount").text(intFormat(averageData["X000"]))
 		d3.select(".tt-val.industry.baseline").text(intFormat(averageData[industry]))
+		if(industry == "X000"){
+			d3.select("#mm-industryContainer").style("display","none")
+		}else{
+			d3.select("#mm-industryContainer").style("display","block")
+			d3.select("#mm-industryVal").text(intFormat(averageData[industry]))	
+		}
+		
 
 	}
 	var th = d3.select("#barTitle").node().getBoundingClientRect().height
@@ -436,8 +489,6 @@ function changeBaselineType(newBaselineType){
 		}
 		else if(currentBaselineType == "cbsa"){
 
-			// newCounty = cbsaToCounty[currentBaselineId][0]
-			// zoomOut()
 			d3.select("#clickedBaselineType").datum("us")
 			setActiveBaseline(getUsAverageData(),"", "us", true)
 			if(getClickedTractData() != ""){
@@ -1222,31 +1273,71 @@ function initPhone(usData, countyData, cbsaData){
 
     var countyNames = Object.entries(countyData)
     	.map(function(o){
+			var fullName;
+			if(o[1]["properties"]["county_name"].toUpperCase().search("CITY")){
+				fullName = o[1]["properties"]["county_name"] + ", " + o[1]["properties"]["county_name"]
+			}else{
+				fullName = o[1]["properties"]["county_name"] + " County, " + o[1]["properties"]["state_name"]
+			}
     		return {
-    			"label" : o[1]["properties"]["county_name"] + " County, " + o[1]["properties"]["state_name"],
+    			"label" : fullName,
     			"value" : o[0]
     		}
     	})
-    $( "#countySearch" ).autocomplete({
+    $( "#countySearch" )
+    // .focus(
+    // function(){
+    //     $(this).val('');
+    // })
+    // .on("focus", function(){
+    // 	console.log("foo")
+    // 	$(this).value = ""
+    // 	return false
+    // })
+    
+    .autocomplete({
       source: countyNames,
         select: function( event, ui ) {
 			setActiveBaseline(countyData[ui.item.value]["properties"], "", "county", true)	
-
+			$(this).val(ui.item.label)
         	// $(this).text(ui.item.label)
         	return false;
+        },
+        create: function(event, ui){
+        	$(this)
+        		.val("Search for your county")
+        		.on("focus", function(){
+        			$(this)
+        				.val("")
+        				.addClass("active")
+
+        		})
         }
 
-    });
+    })
+    // .val('Search for your county')
+    
+
     $( "#cbsaSearch" ).autocomplete({
       source: cbsaNames,
         select: function( event, ui ) {
 			setActiveBaseline(cbsaData[ui.item.value]["properties"], "", "cbsa", true)	
-
+			$(this).val(ui.item.label)
         	// $(this).text(ui.item.label)
         	return false;
+        },
+        create: function(event, ui){
+        	$(this)
+        		.val("Search for your metro area")
+        		.on("focus", function(){
+        			$(this)
+        				.val("")
+        				.addClass("active")
+
+        		})
         }
 
-    });
+    })
 
 }
 // function updateTooltip()
