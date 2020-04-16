@@ -323,6 +323,7 @@ body{
     height: 40px;
     font-size: 18px;
     padding-left: 10px;
+    border: 1px solid #696969;
     text-overflow: ellipsis;
 }
 #mm-title{
