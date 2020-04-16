@@ -337,7 +337,7 @@ function setActiveBaseline(averageData, geometry, baselineType, clicked){
 	}
 	if(baselineType == "us"){
 		d3.selectAll(".tt-cell.baseline").style("display","none")
-		d3.select("#barTitle span").html("the US")
+		d3.select("#barTitle span").html("US")
 		d3.select("#barTotalCount").text(intFormat(usTotal))
 		d3.select("#clickedBaselineId").datum("us")
 	}else{
@@ -414,7 +414,7 @@ function setActiveTract(tractData, geometry, clicked){
 	// })
 
 	d3.selectAll(".tt-cell.tract").style("display","inline-block")
-	d3.select("#barTitle span").html("the selected tract")
+	d3.select("#barTitle span").html("Selected tract")
 
 	var industry = getIndustry()
 
