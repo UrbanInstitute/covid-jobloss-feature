@@ -1,7 +1,7 @@
 import csv
 import json
 
-countyReader = csv.reader(open("barTest.csv","r"), delimiter="\t")
+countyReader = csv.reader(open("data/source/sum_job_loss_us.csv","r"), delimiter=",")
 
 countyHeader = next(countyReader)
 
@@ -30,6 +30,6 @@ for rowList in countyReader:
 	outData[geoid] = {"t":total, "vs":vals}
 
 
-with open('data/countyMedian.json', 'wt') as out:
+with open('data/sum_job_loss_us.json', 'wt') as out:
     json.dump(outData, out, sort_keys=True, separators=(',', ':'))
 

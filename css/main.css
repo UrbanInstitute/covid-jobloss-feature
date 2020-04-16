@@ -1,13 +1,26 @@
 svg, body{
 	font-family: Lato;
 }
-
+body{
+    color: #000;
+}
+#mapColumn{
+    width: 650px;
+    /*width: 270;*/
+    display: inline-block;
+}
+#barColumn{
+    display: inline-block;
+    top: -20px;
+    position: relative;
+}
 #mapContainer{
 	display: inline-block;
     position: relative;
     bottom: 0;
     width: 650px;
-    height: 450px;
+    /*width: 270px;*/
+    height: 390px;
     float: left;
 }
 #barChartContainer{
@@ -19,19 +32,166 @@ svg, body{
     float: left;
     cursor: pointer;
 }
+#hiddenDataContainer{
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 0px;
+    height: 0px;
+}
 
+
+/*********************************************************************************/
+/******************************      TAB WRAPPER      ****************************/
+/*********************************************************************************/
+#baselineTabs{
+    width: 100%;
+    height: 45px;
+    margin-bottom: 45px;
+}
+#baselineTabs.county{
+    border-bottom: 2px solid #D2D2D2;
+}
+#baselineTabs.cbsa{
+    border-bottom: 2px solid #D2D2D2;
+}
+.baselineTab{
+    height: 27px;
+    display: inline-block;
+    float: right;
+    padding: 9px;
+    padding-bottom: 2px;
+    /*background: green;*/
+    width: 90px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+    color: #000;
+    background: #f5f5f5;
+    margin-bottom: 40px;
+    margin-top: 5px;
+    cursor: pointer;
+    border-top: 2px solid #D2D2D2;
+    border-left: 2px solid #D2D2D2;
+    border-right: 2px solid #D2D2D2;
+    border-bottom: 2px solid #D2D2D2;
+}
+.baselineTab.county{
+    margin-right: 19px;
+}
+.baselineTab.cbsa{
+    margin-right: calc(50% - 123px);
+}
+.baselineTab.active{
+    background: #fff;
+    font-weight: bold;
+}
+.baselineTab.active{
+    color: #1696D2;
+    border-top: 2px solid #D2D2D2;
+    border-left: 2px solid #D2D2D2;
+    border-right: 2px solid #D2D2D2;
+    border-bottom: 2px solid #fff;
+}
+.baselineTab.disabled{
+    color: #9d9d9d;
+    pointer-events: none;
+}
+
+
+
+/**********************************************************/
+/************************** Tooltip ***********************/
+/**********************************************************/
+#mapTitle{
+    font-weight: 300;
+    font-size: 24px;
+    font-weight: 100;
+    line-height: 29px;
+    margin-bottom: 29px;
+}
+.mapSubhed{
+    font-style: normal;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 22px;
+    color: #353535;
+    margin-bottom: 3px;
+}
+.mapSubhed.industry span{
+    font-size: 14px;
+    display: block;
+    font-style: italic;
+}
+.tt-cell{
+    display: inline-block;
+    height: 36px;
+    display: block;
+    float: left;
+}
+.tt-cell.us{
+    width: 176px;
+}
+.tt-cell.baseline{
+    display: none;
+    position: relative;
+}
+.tt-cell.baseline div{
+    padding-top: 3px;
+}
+.tt-cell.tract{
+    display: none;
+}
+.tt-cell.tract div{
+    top: -2px;
+    position: relative;
+}
+.tt-geo{
+    font-size: 14px;
+    color: #353535;
+    display: inline-block;
+    margin-right: 10px;
+}
+.tt-geo.baseline{
+    max-width: 230px;
+    margin-right: 13px;
+}
+.tt-val{
+    font-size: 14px;
+    line-height: 27px;
+    color: #1696D2;
+    display: inline-block;
+}
+.tt-val.baseline{
+    top: -5px;
+    position: absolute;
+}
+.tt-row{
+    margin-bottom: 20px;
+    display: block;
+}
+.tt-row.industry{
+    display: none;
+    clear: both;
+    float: left;
+    margin-top: 12px;
+    width: 100%;
+    margin-bottom: 10px;
+}
+.tt-cell.tract{
+    float: right;
+}
 /**********************************************************/
 /**************************** MAP *************************/
 /**********************************************************/
 
 #zoomOutIcon{
-    position: absolute;
-    top: 0px;
-    right: 0px;
-    z-index: 1;
-    text-transform: uppercase;
-    font-weight: bold;
-    font-size: 20px;
+    float: right;
+    font-size: 14px;
+    font-style: italic;
+    margin-top: 5px;
+    color: #1696d2;
+    cursor: pointer;
     opacity: 0;
 }
 .baselineControl{
@@ -58,13 +218,67 @@ svg, body{
     color: #9d9d9d;
     pointer-events: none;
 }
+#legendContainer{
+    float: right;
+    clear: both;
+    margin-top: 10px;
+    position: relative;
+}
+.lKey{
+    width: 30px;
+    height: 20px;
+    display: inline-block;
+    position: relative;
+}
+.lLabel{
+    position: absolute;
+    top: 19px;
+    right: -4px;
+    font-size: 12px;
+}
+.ll18{
+    display: none;
+}
+.ll0{
+    left: -3px;
+}
 
 /**********************************************************/
 /************************ BAR CHART ***********************/
 /**********************************************************/
-
+#allContainer{
+    background: rgba(207,232,243,.55);
+    padding: 5px 8px;
+    margin-left: 9px;
+    margin-top: 17px;
+    cursor: pointer;
+}
+#barChartContainer svg{
+    margin-top: 16px;
+}
+#barTitleContainer{
+    height: 17px;
+    position: relative;
+}
+#barTitle{
+    font-size: 14px;
+    line-height: 17px;
+    color: #333333;
+    font-weight: bold;
+    position: absolute;
+    bottom: 0px;
+}
+#barTotalCount{
+    font-weight: bold;
+    font-size: 36px;
+    line-height: 43px;
+    color: #1696D2;
+}
 .chartEl{
 	stroke-width: 2px;
+}
+.X14.chartEl{
+    opacity: 0 !important;
 }
 .baseline.chartEl{
 	stroke: #1696d2;
@@ -74,9 +288,6 @@ svg, body{
 }
 .tract.chartEl{
 	stroke: #fdbf11;
-}
-.X14.chartEl{
-    opacity: 0 !important;
 }
 .industryLabel{
 	font-size: 12px;
@@ -92,5 +303,62 @@ svg, body{
     font-size: 12px;
     font-style: italic;
     position: absolute;
-    left: 170px;
+    left: 90px;
+    margin-top: 11px;
+}
+
+
+
+#isMobile, #isPhone{
+    display: none;
+}
+
+@media(max-width: 995px){
+    #isMobile{
+        display: block;
+    }
+    #mapColumn{
+        width: 270px;
+        margin-left: calc(50% - 300px);
+    }
+    #mapTitle{
+        white-space: nowrap;
+    }
+    #barColumn{
+        top: 38px;
+    }
+    .tt-cell.tract {
+        float: left;
+    }
+    .tt-cell{
+        height: 27px;
+    }
+    #mapContainer{
+
+    }
+/*    #barColumn{
+        display: inline-block;
+        top: -20px;
+        position: relative;
+    }
+*/    #mapContainer{
+        width: 270px;
+    }
+}
+@media(max-width: 630px){
+    #isPhone{
+        display: block;
+    }
+    #isMobile{
+        display: none;
+    }
+    #barColumn {
+        top: -32px;
+    }
+    #mapColumn, .barBg, .lineClose{
+        display: none;
+    }
+    #allContainer{
+        background: transparent;
+    }
 }
