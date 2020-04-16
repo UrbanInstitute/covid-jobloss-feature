@@ -801,7 +801,7 @@ function initMap(){
 	var map = new mapboxgl.Map({
 		attributionControl: false,
 		container: 'mapContainer',
-		style: 'mapbox://styles/urbaninstitute/ck932c9lb0tt91imwh2egyycq',
+		style: 'mapbox://styles/urbaninstitute/ck932t1q30q5q1ijyff7dtcdq',
 		center: US_CENTER,
 		zoom: US_ZOOM,
 		maxZoom: 12,
