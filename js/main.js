@@ -938,7 +938,7 @@ function initMap(){
 
 			}
 			tractMax = e.features[0].properties.tmax
-			map.getSource('hoverBaselinePolygonSource').setData(hoverData);
+			// map.getSource('hoverBaselinePolygonSource').setData(hoverData);
 			setActiveBaseline(e.features[0].properties, "", "county", false)	
 		})
 		map.on("click", "county-fill", function(e){
@@ -960,7 +960,7 @@ function initMap(){
 						'coordinates': coords
 								}
 				}
-			map.getSource('hoverBaselinePolygonSource').setData(hoverData);
+			// map.getSource('hoverBaselinePolygonSource').setData(hoverData);
 
 			setActiveBaseline(e.features[0].properties, hoverData, "county", true)	
 			// g = f.geometry
@@ -1005,7 +1005,7 @@ function initMap(){
 
 			}
 			tractMax = e.features[0].properties.tmax
-			map.getSource('hoverBaselinePolygonSource').setData(hoverData);
+			// map.getSource('hoverBaselinePolygonSource').setData(hoverData);
 			setActiveBaseline(e.features[0].properties, "", "cbsa", false)	
 		})
 		map.on("click", "county-fill", function(e){
@@ -1027,7 +1027,7 @@ function initMap(){
 						'coordinates': coords
 								}
 				}
-			map.getSource('hoverBaselinePolygonSource').setData(hoverData);
+			// map.getSource('hoverBaselinePolygonSource').setData(hoverData);
 
 			setActiveBaseline(e.features[0].properties, hoverData, "county", true)	
 			// g = f.geometry
@@ -1114,14 +1114,14 @@ function initMap(){
 
 		function mouseout(map){
 			if(map.getZoom() == US_ZOOM){
-				map.getSource('hoverBaselinePolygonSource').setData(hideHoverData);
+				// map.getSource('hoverBaselinePolygonSource').setData(hideHoverData);
 			}
 			map.setLayoutProperty("county-stroke", 'visibility', 'none');
 			map.setLayoutProperty("cbsa-stroke", 'visibility', 'none');
 			if(getClickedBaselineType() == "us"){
 				setActiveBaseline(getUsAverageData(),"", "us", true)
 				dispatch.call("deselectTract")
-				map.getSource('hoverBaselinePolygonSource').setData(hideHoverData);
+				// map.getSource('hoverBaselinePolygonSource').setData(hideHoverData);
 			}else{
 				if(getClickedTractData() == ""){
 					dispatch.call("deselectTract")
@@ -1148,7 +1148,7 @@ function initMap(){
 				// 					}
 				// 	}
 				var hoverData = getClickedBaselineGeometry();
-				map.getSource('hoverBaselinePolygonSource').setData(hoverData);
+				// map.getSource('hoverBaselinePolygonSource').setData(hoverData);
 			}
 
 
@@ -1170,7 +1170,7 @@ function initMap(){
 
 
 		dispatch.on("zoomOut", function(){
-			map.getSource('hoverBaselinePolygonSource').setData(hideHoverData);
+			// map.getSource('hoverBaselinePolygonSource').setData(hideHoverData);
 			map.setCenter(US_CENTER)
 			map.zoomTo(US_ZOOM)
 			map.setLayoutProperty("cbsa-fill", 'visibility', 'visible');
@@ -1214,7 +1214,7 @@ function initMap(){
 
 		dispatch.on("viewByCounty", function(){
 			d3.select("#clickedBaselineType").datum("us")
-			map.getSource('hoverBaselinePolygonSource').setData(hideHoverData);
+			// map.getSource('hoverBaselinePolygonSource').setData(hideHoverData);
 
 			map.setLayoutProperty("cbsa-fill", 'visibility', 'none');
 			map.setLayoutProperty("cbsa-mask", 'visibility', 'none');
@@ -1225,7 +1225,7 @@ function initMap(){
 		})
 		dispatch.on("viewByCbsa", function(){
 			d3.select("#clickedBaselineType").datum("us")
-			map.getSource('hoverBaselinePolygonSource').setData(hideHoverData);
+			// map.getSource('hoverBaselinePolygonSource').setData(hideHoverData);
 
 			map.setLayoutProperty("cbsa-fill", 'visibility', 'visible');
 			map.setLayoutProperty("cbsa-mask", 'visibility', 'visible');
