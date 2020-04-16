@@ -370,11 +370,13 @@ function setActiveBaseline(averageData, geometry, baselineType, clicked){
 		d3.select(".tt-val.all.baseline").text(intFormat(averageData["X000"]))
 		d3.select("#barTotalCount").text(intFormat(averageData["X000"]))
 		d3.select(".tt-val.industry.baseline").text(intFormat(averageData[industry]))
-		if(industry == "X000"){
-			d3.select("#mm-industryContainer").style("display","none")
-		}else{
-			d3.select("#mm-industryContainer").style("display","block")
-			d3.select("#mm-industryVal").text(intFormat(averageData[industry]))	
+		if(IS_PHONE()){
+			if(industry == "X000"){
+				d3.select("#mm-industryContainer").style("display","none")
+			}else{
+				d3.select("#mm-industryContainer").style("display","block")
+				d3.select("#mm-industryVal").text(intFormat(averageData[industry]))	
+			}
 		}
 		
 
