@@ -1317,7 +1317,7 @@ function initPhone(usData, countyData, cbsaData){
     	.map(function(o){
 			var fullName;
 			if(o[1]["properties"]["county_name"].toUpperCase().search("CITY")){
-				fullName = o[1]["properties"]["county_name"] + ", " + o[1]["properties"]["county_name"]
+				fullName = o[1]["properties"]["county_name"] + ", " + o[1]["properties"]["state_name"]
 			}else{
 				fullName = o[1]["properties"]["county_name"] + " County, " + o[1]["properties"]["state_name"]
 			}
