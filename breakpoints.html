@@ -1,0 +1,79 @@
+<html>
+<head>
+    <style>
+        h3{
+            font-size: 32px;
+            margin-left: 21px;
+            font-weight: bold;
+            margin-top: 60px;
+        }
+        body{
+            font-family: Lato;
+            color: #353535;
+            width: 1030px;
+            margin: 0 auto;
+        }
+        img{
+            width: 100%;
+        }
+        .bigImg{
+            width: 600px;
+        }
+        .smallImg{
+            width: 290px;
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            box-shadow: 2px 2px 12px #d2d2d2;
+        }
+        .imgContainer{
+            width: 600px;
+            position: relative;
+        }
+        .imgContainer.tract{
+            width: 500px;
+            position: relative;
+            display: inline-block;
+            margin-right: 10px;
+        }
+        .imgContainer.tract .bigImg{
+            width: 500px;
+        }
+    </style>
+</head>
+<body>
+    <h3>CBSA</h3>
+    <div class = "imgContainer">
+        <div class = "bigImg">
+            <img src = "https://ui-lodes-job-change-public.s3.amazonaws.com/summary_stats/max_cbsa_industry_hist_zoomed.png">
+        </div>
+        <div class = "smallImg">
+            <img src = "https://ui-lodes-job-change-public.s3.amazonaws.com/summary_stats/max_cbsa_industry_hist.png">
+        </div>
+    </div>
+
+    <h3>County</h3>
+    <div class = "imgContainer">
+        <div class = "bigImg">
+            <img src = "https://ui-lodes-job-change-public.s3.amazonaws.com/summary_stats/max_county_industry_hist_zoomed.png">
+        </div>
+        <div class = "smallImg">
+            <img src = "https://ui-lodes-job-change-public.s3.amazonaws.com/summary_stats/max_county_industry_hist.png">
+        </div>
+    </div>
+
+    <h3>Tract</h3>
+    <div class = "imgContainer tract">
+        <div class = "bigImg">
+            <img src = "https://ui-lodes-job-change-public.s3.amazonaws.com/summary_stats/tmax_cbsa_hist.png">
+        </div>
+    </div>
+    <div class = "imgContainer tract">
+        <div class = "bigImg">
+            <img src = "https://ui-lodes-job-change-public.s3.amazonaws.com/summary_stats/tmax_county_hist.png">
+        </div>
+    </div>
+
+
+</body>
+</html>
