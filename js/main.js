@@ -354,13 +354,8 @@ function setActiveBaseline(averageData, geometry, baselineType, clicked){
 		var industry = getIndustry()
 
 		if(baselineType == "county"){
-			var fullName;
-			console.log(averageData)
-			if(averageData.county_name.toUpperCase().search("CITY")){
-				fullName = averageData.county_name + ", " + averageData.state_name
-			}else{
-				fullName = averageData.county_name + " County, " + averageData.state_name
-			}
+			var fullName = averageData.county_name + ", " + averageData.state_name
+			
 			d3.selectAll(".tt-geo.baseline").html(fullName)
 			d3.select("#barTitle span").html(fullName)
 		}else{
@@ -1030,7 +1025,7 @@ function initMap(){
 			setActiveBaseline(e.features[0].properties, hoverData, "county", true)	
 			// g = f.geometry
 			// var data = {'type': 'Feature', 'geometry': g}
-			$("#countySearch").val(e.features[0].properties.county_name)
+			$("#countySearch").val(e.features[0].properties.county_name + ", " + e.features[0].properties.state_name)
 
 			zoomIn("county", e.features[0].properties.county_fips, bd.bounds)
 
@@ -1317,7 +1312,7 @@ function initPhone(usData, countyData, cbsaData){
     var countyNames = Object.entries(countyData)
     	.map(function(o){
     		return {
-    			"label" : o[1]["properties"]["county_name"],
+    			"label" : o[1]["properties"]["county_name"] + ", " + o[1]["properties"]["state_name"],
     			"value" : o[0]
     		}
     	})
