@@ -452,15 +452,16 @@ function changeBaselineType(newBaselineType){
 
 	if(newBaselineType == currentBaselineType){ return false }
 
+	if(newBaselineType == "county"){
+		d3.select("#cbsaSearch").style("display","none")
+		d3.select("#countySearch").style("display","block")
+	}else{
+		d3.select("#cbsaSearch").style("display","block")
+		d3.select("#countySearch").style("display","none")
+	}
 
 	if(IS_PHONE()){
-		if(newBaselineType == "county"){
-			d3.select("#cbsaSearch").style("display","none")
-			d3.select("#countySearch").style("display","block")
-		}else{
-			d3.select("#cbsaSearch").style("display","block")
-			d3.select("#countySearch").style("display","none")
-		}
+
 		setActiveBaseline(getUsAverageData(),"", "us", true)
 		d3.select(".baselineTab." + currentBaselineType).classed("active", false)
 		d3.select(".baselineTab." + newBaselineType).classed("active", true)
@@ -963,9 +964,6 @@ function initMap(){
 			// map.getSource('hoverBaselinePolygonSource').setData(hoverData);
 
 			setActiveBaseline(e.features[0].properties, hoverData, "county", true)	
-			// g = f.geometry
-			// var data = {'type': 'Feature', 'geometry': g}
-
 			zoomIn("county", e.features[0].properties.county_fips, bd.bounds)
 		})
 		map.on('mousemove', 'cbsa-fill', function(e) {
@@ -1032,11 +1030,12 @@ function initMap(){
 			setActiveBaseline(e.features[0].properties, hoverData, "county", true)	
 			// g = f.geometry
 			// var data = {'type': 'Feature', 'geometry': g}
+			$("#countySearch").val(e.features[0].properties.county_name)
 
 			zoomIn("county", e.features[0].properties.county_fips, bd.bounds)
 
 
-		})
+		// })
 		// map.on('mouseout', 'cbsa-fill', function(e) {
 		// 	if(getClickedButton() == "county") return false
 		// 	console.log()
@@ -1044,7 +1043,7 @@ function initMap(){
 		// 	// console.log(map.getFeatureState({"source":'composite', sourceLayer: 'cbsa-stroke', "id": parseInt(e.features[0].properties.cbsa)})	)
 
 
-		// })
+		})
 		map.on("click", "cbsa-fill", function(e){
 			if(getClickedButton() == "county_fips") return false
 			d3.select("#clickedBaselineType").datum("cbsa")
@@ -1065,6 +1064,8 @@ function initMap(){
 				}
 			// g = f.geometry
 			setActiveBaseline(e.features[0].properties, hoverData, "cbsa", true)	
+			$("#cbsaSearch").val(e.features[0].properties.cbsa_name)
+
 
 			// var data = {'type': 'Feature', 'geometry': g}
 
@@ -1315,31 +1316,27 @@ function initPhone(usData, countyData, cbsaData){
 
     var countyNames = Object.entries(countyData)
     	.map(function(o){
-			var fullName;
-			if(o[1]["properties"]["county_name"].toUpperCase().search("CITY")){
-				fullName = o[1]["properties"]["county_name"] + ", " + o[1]["properties"]["state_name"]
-			}else{
-				fullName = o[1]["properties"]["county_name"] + " County, " + o[1]["properties"]["state_name"]
-			}
     		return {
-    			"label" : fullName,
+    			"label" : o[1]["properties"]["county_name"],
     			"value" : o[0]
     		}
     	})
     $( "#countySearch" )
-    // .focus(
-    // function(){
-    //     $(this).val('');
-    // })
-    // .on("focus", function(){
-    // 	console.log("foo")
-    // 	$(this).value = ""
-    // 	return false
-    // })
-    
     .autocomplete({
       source: countyNames,
         select: function( event, ui ) {
+
+        	if(!IS_PHONE()){
+				d3.select("#clickedBaselineType").datum("county")
+				
+				// var coordinates = e.features[0].geometry.coordinates[0]		
+				bd = getCountyBoundsData()[countyData[ui.item.value]["properties"]["county_fips"]]
+				zoomIn("county", countyData[ui.item.value]["properties"]["county_fips"], bd.bounds)
+			}
+
+			// map.getSource('hoverBaselinePolygonSource').setData(hoverData);
+
+
 			setActiveBaseline(countyData[ui.item.value]["properties"], "", "county", true)	
 			$(this).val(ui.item.label)
         	// $(this).text(ui.item.label)
@@ -1363,6 +1360,18 @@ function initPhone(usData, countyData, cbsaData){
     $( "#cbsaSearch" ).autocomplete({
       source: cbsaNames,
         select: function( event, ui ) {
+        	if(!IS_PHONE()){
+				d3.select("#clickedBaselineType").datum("cbsa")
+				// var coordinates = e.features[0].geometry.coordinates[0]		
+				bd = getCbsaBoundsData()[cbsaData[ui.item.value]["properties"]["cbsa"]]
+				zoomIn("cbsa", cbsaData[ui.item.value]["properties"]["cbsa"], bd.bounds)
+			}
+			// g = f.geometry
+
+			// var data = {'type': 'Feature', 'geometry': g}
+
+			
+
 			setActiveBaseline(cbsaData[ui.item.value]["properties"], "", "cbsa", true)	
 			$(this).val(ui.item.label)
         	// $(this).text(ui.item.label)
@@ -1399,9 +1408,10 @@ function init(
 	initBarChart(rawUSAverageData);
 	if(!IS_PHONE()){
 		initMap();
-	}else{
-		initPhone(rawUSAverageData, rawCountyBounds, rawCbsaBounds)
 	}
+	// else{
+		initPhone(rawUSAverageData, rawCountyBounds, rawCbsaBounds)
+	// }
 	initControls();
 	
 }

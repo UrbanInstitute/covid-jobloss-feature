@@ -170,6 +170,9 @@ body{
     margin-bottom: 20px;
     display: block;
 }
+.tt-row.all{
+    margin-top: 78px;
+}
 .tt-row.industry{
     display: none;
     clear: both;
@@ -327,14 +330,17 @@ body{
 
 
 
-#isMobile, #isPhone{
+#isMobile, #isPhone, #mm-title, #mm-disclaimer{
     display: none;
 }
 #mobileMenu{
-    display: none;
+    display: block;
     margin-left: 18px;
     height: 220px;
-
+    width: 370px;
+    position: absolute;
+    top: 138px;
+    left: -10px;
 }
 #mobileMenu input{
     width: 100%;
@@ -388,6 +394,9 @@ body{
     #isMobile{
         display: block;
     }
+    #mobileMenu{
+        left: calc(50% - 318px);
+    }
 .mapboxgl-ctrl-bottom-right {
     right: 0;
     bottom: 50px;
@@ -425,7 +434,7 @@ body{
     position: relative;}
 }
 @media(max-width: 630px){
-    #isPhone{
+    #isPhone, #mm-title, #mm-disclaimer{
         display: block;
     }
     #isMobile{
@@ -445,6 +454,10 @@ body{
     }
     #mobileMenu{
         display: block;
+        width: auto;
+        position: relative;
+        top: auto;
+        left: auto;
     }
     #allContainer{
         width:262px;
