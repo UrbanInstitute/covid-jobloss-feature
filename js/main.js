@@ -226,6 +226,7 @@ function getIndustry(){
 	
 }
 function zoomOut(){
+	clearSearch()
 	d3.select("#zoomOutIcon").transition().style("opacity",0)
 	d3.select("#clickedBaselineType").datum("us")
 
@@ -1025,7 +1026,8 @@ function initMap(){
 			setActiveBaseline(e.features[0].properties, hoverData, "county", true)	
 			// g = f.geometry
 			// var data = {'type': 'Feature', 'geometry': g}
-			$("#countySearch").val(e.features[0].properties.county_name + ", " + e.features[0].properties.state_name)
+			// $("#countySearch").val(e.features[0].properties.county_name + ", " + e.features[0].properties.state_name)
+			clearSearch()
 
 			zoomIn("county", e.features[0].properties.county_fips, bd.bounds)
 
@@ -1059,7 +1061,8 @@ function initMap(){
 				}
 			// g = f.geometry
 			setActiveBaseline(e.features[0].properties, hoverData, "cbsa", true)	
-			$("#cbsaSearch").val(e.features[0].properties.cbsa_name)
+			// $("#cbsaSearch").val(e.features[0].properties.cbsa_name)
+			clearSearch()
 
 
 			// var data = {'type': 'Feature', 'geometry': g}
@@ -1286,6 +1289,10 @@ function initControls(){
 	.on("mouseout", function(d){
 		changeIndustry(getClickedIndustry(), false)
 	})
+
+	d3.select("#searchicon").on("click", function(){
+		if(d3.select(this).classed("close")) clearSearch()
+	})
 }
 
 function initTooltip(usAverageData){
@@ -1298,6 +1305,14 @@ function initTooltip(usAverageData){
 	d3.select("#tractData").datum("")
 	d3.select("#tractGeometry").datum("")
 }
+function clearSearch(){
+	$("#countySearch").val("Search for your county").removeClass("active")
+	$("#cbsaSearch").val("Search for your metro area").removeClass("active")
+	d3.select("#searchicon").attr("src", "img/searchIcon.png").classed("close", false)
+
+
+}
+
 function initPhone(usData, countyData, cbsaData){
 	d3.selectAll(".baselineTab").classed("disabled",false)
 
@@ -1328,6 +1343,7 @@ function initPhone(usData, countyData, cbsaData){
 				bd = getCountyBoundsData()[countyData[ui.item.value]["properties"]["county_fips"]]
 				zoomIn("county", countyData[ui.item.value]["properties"]["county_fips"], bd.bounds)
 			}
+			d3.select("#searchicon").attr("src", "img/closeIcon.png").classed("close", true)
 
 			// map.getSource('hoverBaselinePolygonSource').setData(hoverData);
 
@@ -1365,7 +1381,7 @@ function initPhone(usData, countyData, cbsaData){
 
 			// var data = {'type': 'Feature', 'geometry': g}
 
-			
+			d3.select("#searchicon").attr("src", "img/closeIcon.png").classed("close", true)
 
 			setActiveBaseline(cbsaData[ui.item.value]["properties"], "", "cbsa", true)	
 			$(this).val(ui.item.label)
