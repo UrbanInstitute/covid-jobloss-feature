@@ -12,7 +12,7 @@ This repo contains the code needed to generate the interactive feature on the nu
     - Run `downloadData.sh` from within `data/` to pull these files from S3 into the `data/` directory
     - Push the files to the production server
 
-3. Check if the overall national scale max value needs to change
+3. Check if the overall national scale max value for the lollipop charts needs to change
     - If so, update the value in line 13 of `main.js`
 
 4. Update the Mapbox tiles for the map
