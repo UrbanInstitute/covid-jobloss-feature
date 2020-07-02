@@ -8,15 +8,15 @@ This repo contains the code needed to generate the interactive feature on the nu
     - Review the bin width histograms [here](http://apps.urban.org/features/covid-jobloss-feature/breakpoints.html) to make sure the top bin contains the max value and is a nice round number
     - If anything needs to be changed, let Ajjit know to update the data json files with the new breakpoints
 
-2. Check if the overall national scale max value needs to change
-    - If so, update the value in line 13 of `main.js`
-
-3. Update the three json files (`sum_job_loss_cbsa_reshaped.json`, `sum_job_loss_county_reshaped.json`, `sum_job_loss_us.json`) in `data/`
-    - Run `downloadData.sh` to pull these files from S3 into the `data/` directory
+2. Update the three json files (`sum_job_loss_cbsa_reshaped.json`, `sum_job_loss_county_reshaped.json`, `sum_job_loss_us.json`) in `data/`
+    - Run `downloadData.sh` from within `data/` to pull these files from S3 into the `data/` directory
     - Push the files to the production server
 
+3. Check if the overall national scale max value needs to change
+    - If so, update the value in line 13 of `main.js`
+
 4. Update the Mapbox tiles for the map
-    - Run `makeMaptiles.sh` 
+    - Run `makeMaptiles.sh` from within `build_scripts/`
         - This will pull the new geojson files from S3 and add a top level id property for each feature. Then, it will convert the geojson files into mbtile tilesets for use in Mapbox via `tippecanoe`. Three output files are created:
             - `cbsas_id.mbtiles`
             - `counties_id.mbtiles`
