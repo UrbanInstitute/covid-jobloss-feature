@@ -110,6 +110,15 @@ body{
     line-height: 29px;
     margin-bottom: 29px;
 }
+
+#mapSubtitle{
+    font-size: 18px;
+    top: -26px;
+    position: relative;
+    left: 5px;
+    font-style: italic;
+    font-weight: 300;
+}
 .mapSubhed{
     font-style: normal;
     font-weight: bold;
@@ -339,7 +348,7 @@ body{
     height: 220px;
     width: 250px;
     position: absolute;
-    top: 138px;
+    top: 170px;
     left: -10px;
 }
 #mobileMenu input{

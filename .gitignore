@@ -3,3 +3,4 @@ data/source/*
 *.geojson
 *.mbtiles
 sketches/*.png
+build_scripts/*json
