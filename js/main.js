@@ -10,7 +10,7 @@ var dispatch = d3.dispatch("zoomOut", "zoomIn", "changeIndustry", "viewByCounty"
 
 var INIT_GEOID = "99"
 var US_ZOOM = 3.0;
-var US_MAX = 2500000;
+var US_MAX = 2000000;
 var US_CENTER = [-95.5795, 37.8283]
 var usTotal;
 var tractMax;
