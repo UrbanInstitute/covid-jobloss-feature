@@ -1,0 +1,8 @@
+Usage: ndjson-map [options] [expression]
+
+Transform values in a newline-delimited JSON stream.
+
+Options:
+  -V, --version                output the version number
+  -r, --require <name=module>  require a module (default: {"i":-1})
+  -h, --help                   output usage information
