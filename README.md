@@ -25,3 +25,5 @@ This repo contains the code needed to generate the interactive feature on the nu
             - `cbsas_id.mbtiles` should be uploaded to this tileset: cbsas_with_id-d4ld8q
             - `counties_id.mbtiles` should be uploaded to this tileset: counties_new-2ynusr
             - `out.mbtiles` should be uploaded to this tileset: tracts-7tqd4h
+
+5. Update the last updated date on the [urban.org feature](https://edit.urban.org/features/where-low-income-jobs-are-being-lost-covid-19)
