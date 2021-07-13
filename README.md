@@ -22,7 +22,6 @@ This repo contains the code needed to generate the interactive feature on the nu
                 - `counties_id.mbtiles` should be uploaded to this tileset: counties_new-2ynusr
                 - `out.mbtiles` should be uploaded to this tileset: tracts-7tqd4h
     - NOTE: as soon as you upload these files, the data that powers the live graphic will be updated (no staging server exists for Mapbox). It can take a while (30 mins?) for Mapbox's internal caches to clear, and the data to show up on the map.
-5. Update the last updated date on the [urban.org feature](https://edit.urban.org/features/where-low-income-jobs-are-being-lost-covid-19)
 7. Check if the overall national scale max value for the lollipop charts needs to change (that is the maximum value for the x axis, on page load). If it needs to change, the chart will look broken (the largest lollipop dot will not show up or be cut off). 
     - If so, update the hard-coded value in line 13 of `main.js`
     - As with the color scales, as jobloss rates have slowed, this number hasn't had to change in recent months.
@@ -30,3 +29,5 @@ This repo contains the code needed to generate the interactive feature on the nu
     - Run `downloadData.sh` from within `data/` to download these files from S3 into the `data/` directory
     - Push the files to GitHub, then pulll them to the production server. Note that once you do this
     - NOTE: once you pull these to prod, the lollipop chart should be live. 
+5. From the Drupal CMS, update the last updated date on the [urban.org feature](https://edit.urban.org/features/where-low-income-jobs-are-being-lost-covid-19)
+
